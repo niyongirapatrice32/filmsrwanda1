@@ -343,5 +343,288 @@ https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg
 
 </body>
   </html>
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aviator Betting Game - Virtual Demo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background: #1a1a2e;
+      font-family: 'Poppins', sans-serif;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    h1 {
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #f39c12;
+      text-shadow: 0 0 8px #f39c12;
+    }
+    .balance {
+      font-size: 22px;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: #16213e;
+      border-radius: 8px;
+      width: 280px;
+      text-align: center;
+      box-shadow: 0 0 10px #f39c12aa;
+      user-select: none;
+    }
+    .bet-container {
+      background: #16213e;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #f39c12bb;
+      width: 320px;
+      margin-bottom: 25px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    input[type=number] {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      margin-bottom: 12px;
+      color: #1a1a2e;
+      font-weight: 600;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #f39c12;
+      color: #1a1a2e;
+      box-shadow: 0 0 15px #f39c12;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    button:hover:not(:disabled) {
+      background: #d48806;
+    }
+    .game-area {
+      background: #0f3460;
+      border-radius: 15px;
+      width: 320px;
+      height: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px #53354a;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .multiplier {
+      font-size: 60px;
+      font-weight: 900;
+      color: #f39c12;
+      text-shadow: 0 0 12px #f39c12, 0 0 25px #f39c12;
+      margin: 0;
+      user-select: none;
+    }
+    .status {
+      font-size: 20px;
+      margin-top: 10px;
+      font-weight: 600;
+      min-height: 28px;
+    }
+    /* Plane animation */
+    .plane {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      width: 40px;
+      height: 40px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Jet_plane_icon.svg') no-repeat center center;
+      background-size: contain;
+      transition: left 0.1s linear;
+      filter: drop-shadow(0 0 3px #f39c12);
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Aviator Betting Game</h1>
+
+  <div class="balance" id="balance">Balance: 1000.00 units</div>
+
+  <div class="bet-container">
+    <label for="betAmount">Enter your bet amount</label>
+    <input type="number" id="betAmount" min="1" step="1" value="10" />
+    <button id="startBtn">Start Round</button>
+    <button id="cashoutBtn" disabled>Cash Out</button>
+  </div>
+
+  <div class="game-area" id="gameArea">
+    <div class="plane" id="plane"></div>
+    <p class="multiplier" id="multiplier">x1.00</p>
+    <p class="status" id="status"></p>
+  </div>
+
+<script>
+  const balanceEl = document.getElementById('balance');
+  const betInput = document.getElementById('betAmount');
+  const startBtn = document.getElementById('startBtn');
+  const cashoutBtn = document.getElementById('cashoutBtn');
+  const multiplierEl = document.getElementById('multiplier');
+  const statusEl = document.getElementById('status');
+  const planeEl = document.getElementById('plane');
+  const gameAreaEl = document.getElementById('gameArea');
+
+  let balance = 1000.0;
+  let bet = 0;
+  let multiplier = 1.0;
+  let crashPoint = 0;
+  let intervalId = null;
+  let crashed = false;
+
+  // Update balance display
+  function updateBalance() {
+    balanceEl.textContent = `Balance: ${balance.toFixed(2)} units`;
+  }
+
+  // Generate random crash multiplier between 1.0 and 15.0 (more dynamic)
+  function generateCrashPoint() {
+    // Using a weighted randomness for better game feel
+    let p = Math.random();
+    if (p < 0.6) return +(Math.random() * 3 + 1).toFixed(2); // 1.0 to 4.0 (60%)
+    if (p < 0.85) return +(Math.random() * 6 + 4).toFixed(2); // 4.0 to 10.0 (25%)
+    return +(Math.random() * 5 + 10).toFixed(2);              // 10.0 to 15.0 (15%)
+  }
+
+  // Reset game UI state
+  function resetGame() {
+    multiplier = 1.0;
+    crashed = false;
+    multiplierEl.textContent = 'x1.00';
+    statusEl.textContent = '';
+    planeEl.style.left = '0px';
+    cashoutBtn.disabled = true;
+    startBtn.disabled = false;
+    betInput.disabled = false;
+  }
+
+  // Animate the multiplier and plane position
+  function startGameLoop() {
+    const gameWidth = gameAreaEl.clientWidth - planeEl.clientWidth;
+    intervalId = setInterval(() => {
+      multiplier += 0.05;
+
+      multiplierEl.textContent = `x${multiplier.toFixed(2)}`;
+
+      // Move plane from left to right proportional to multiplier (up to crash)
+      let planePos = Math.min(gameWidth * (multiplier / crashPoint), gameWidth);
+      planeEl.style.left = `${planePos}px`;
+
+      if (multiplier >= crashPoint) {
+        clearInterval(intervalId);
+        crashed = true;
+        cashoutBtn.disabled = true;
+        startBtn.disabled = false;
+        betInput.disabled = false;
+
+        multiplierEl.textContent = `CRASHED at x${crashPoint.toFixed(2)}`;
+        statusEl.textContent = `You lost your bet of ${bet.toFixed(2)} units!`;
+      }
+    }, 50);
+  }
+
+  // Start round handler
+  function startRound() {
+    bet = parseFloat(betInput.value);
+    if (isNaN(bet) || bet <= 0) {
+      alert('Please enter a valid bet amount greater than 0.');
+      return;
+    }
+    if (bet > balance) {
+      alert('Insufficient balance!');
+      return;
+    }
+
+    balance -= bet;
+    updateBalance();
+
+    crashPoint = generateCrashPoint();
+
+    multiplier = 1.0;
+    crashed = false;
+
+    multiplierEl.textContent = 'x1.00';
+    statusEl.textContent = 'Game started! Cash out before it crashes.';
+    planeEl.style.left = '0px';
+
+    startBtn.disabled = true;
+    cashoutBtn.disabled = false;
+    betInput.disabled = true;
+
+    startGameLoop();
+  }
+
+  // Cashout handler
+  function cashOut() {
+    if (crashed) return;
+    clearInterval(intervalId);
+
+    cashoutBtn.disabled = true;
+    startBtn.disabled = false;
+    betInput.disabled = false;
+
+    const winnings = +(bet * multiplier).toFixed(2);
+    balance += winnings;
+    updateBalance();
+
+    multiplierEl.textContent = `Cashed out at x${multiplier.toFixed(2)}`;
+    statusEl.textContent = `You won ${winnings.toFixed(2)} units!`;
+  }
+
+  startBtn.addEventListener('click', startRound);
+  cashoutBtn.addEventListener('click', cashOut);
+
+  updateBalance();
+
+  // Bonus: Prevent form submit on Enter key press
+  betInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      startRound();
+    }
+  });
+</script>
+
+</body>
+                                    </html>
   
+  
+
 
