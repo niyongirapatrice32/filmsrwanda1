@@ -208,4 +208,140 @@
 </html> 
 https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aviator Betting Game Demo</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  input, button {
+    padding: 10px;
+    font-size: 16px;
+    margin: 5px;
+  }
+  #multiplier {
+    font-size: 48px;
+    margin: 20px 0;
+    color: green;
+  }
+  #status, #balance {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>Aviator Betting Game Demo</h1>
+
+<div id="balance">Balance: 1000.00 units</div>
+
+<label for="betAmount">Enter your bet:</label><br />
+<input type="number" id="betAmount" min="1" value="10" /><br />
+
+<button id="startBtn">Start Round</button>
+<button id="cashoutBtn" disabled>Cash Out</button>
+
+<div id="multiplier">x1.00</div>
+<div id="status"></div>
+
+<script>
+  let balance = 1000.0;
+  const startBtn = document.getElementById('startBtn');
+  const cashoutBtn = document.getElementById('cashoutBtn');
+  const multiplierDisplay = document.getElementById('multiplier');
+  const statusDisplay = document.getElementById('status');
+  const betInput = document.getElementById('betAmount');
+  const balanceDisplay = document.getElementById('balance');
+
+  let multiplier = 1.0;
+  let intervalId = null;
+  let crashed = false;
+  let crashPoint = 0;
+  let bet = 0;
+  let cashoutMultiplier = 0;
+
+  function getRandomCrashPoint() {
+    return +(Math.random() * 9 + 1).toFixed(2);
+  }
+
+  function updateBalanceDisplay() {
+    balanceDisplay.textContent = 'Balance: ' + balance.toFixed(2) + ' units';
+  }
+
+  function startRound() {
+    bet = parseFloat(betInput.value);
+    if (isNaN(bet) || bet <= 0) {
+      alert('Please enter a valid bet amount greater than 0.');
+      return;
+    }
+    if (bet > balance) {
+      alert('Insufficient balance!');
+      return;
+    }
+
+    balance -= bet;
+    updateBalanceDisplay();
+
+    multiplier = 1.0;
+    crashed = false;
+    crashPoint = getRandomCrashPoint();
+    cashoutMultiplier = 0;
+
+    multiplierDisplay.textContent = 'x1.00';
+    statusDisplay.textContent = 'Game started!';
+
+    startBtn.disabled = true;
+    cashoutBtn.disabled = false;
+    betInput.disabled = true;
+
+    intervalId = setInterval(() => {
+      multiplier += 0.05;
+      multiplierDisplay.textContent = 'x' + multiplier.toFixed(2);
+
+      if (multiplier >= crashPoint) {
+        clearInterval(intervalId);
+        crashed = true;
+        cashoutBtn.disabled = true;
+        startBtn.disabled = false;
+        betInput.disabled = false;
+        multiplierDisplay.textContent = 'CRASHED at x' + crashPoint.toFixed(2);
+        statusDisplay.textContent = 'You lost your bet of ' + bet.toFixed(2) + ' units!';
+      }
+    }, 100);
+  }
+
+  function cashOut() {
+    if (crashed) return;
+
+    cashoutMultiplier = multiplier;
+    clearInterval(intervalId);
+    cashoutBtn.disabled = true;
+    startBtn.disabled = false;
+    betInput.disabled = false;
+
+    const winnings = +(bet * cashoutMultiplier).toFixed(2);
+    balance += winnings;
+    updateBalanceDisplay();
+
+    multiplierDisplay.textContent = 'Cashed out at x' + cashoutMultiplier.toFixed(2);
+    statusDisplay.textContent = 'You won ' + winnings.toFixed(2) + ' units!';
+  }
+
+  startBtn.addEventListener('click', startRound);
+  cashoutBtn.addEventListener('click', cashOut);
+
+  updateBalanceDisplay();
+</script>
+
+</body>
+  </html>
+  
 
