@@ -780,9 +780,147 @@ https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg
   </script>
 </body>
   </html>
-                                                                       </html>
+                  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AviatorBet Offline Demo</title>
+  <style>
+    body { font-family: Arial; max-width: 400px; margin: auto; padding: 20px; }
+    input, button { margin: 5px 0; padding: 10px; width: 100%; }
+    #dashboard, #register { display: none; }
+    #result { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>AviatorBet Offline Demo</h1>
+
+  <div id="auth">
+    <h3>Login</h3>
+    <input id="username" placeholder="Username" />
+    <input id="password" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p>Or <a href="#" onclick="showRegister()">Register</a></p>
+  </div>
+
+  <div id="register">
+    <h3>Register</h3>
+    <input id="regUsername" placeholder="Username" />
+    <input id="regPassword" type="password" placeholder="Password" />
+    <button onclick="register()">Register</button>
+    <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+  </div>
+
+  <div id="dashboard">
+    <h3>Welcome, <span id="dispUser"></span></h3>
+    <p>Balance: <span id="balance"></span> units</p>
+    <input id="betAmount" type="number" placeholder="Enter Bet Amount" />
+    <button onclick="placeBet()">Place Bet</button>
+    <button onclick="logout()">Logout</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function getUsers() {
+      return JSON.parse(localStorage.getItem('users') || '{}');
+    }
+    function saveUsers(users) {
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    let currentUser = null;
+
+    function showRegister() {
+      document.getElementById('auth').style.display = 'none';
+      document.getElementById('register').style.display = 'block';
+    }
+    function showLogin() {
+      document.getElementById('auth').style.display = 'block';
+      document.getElementById('register').style.display = 'none';
+    }
+
+    function register() {
+      const username = document.getElementById('regUsername').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      if (!username || !password) return alert('Fill all fields');
+      const users = getUsers();
+      if (users[username]) return alert('Username taken');
+
+      users[username] = { password, balance: 1000 };
+      saveUsers(users);
+      alert('Registered! You can now login.');
+      showLogin();
+    }
+
+    function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      if (!username || !password) return alert('Fill all fields');
+      const users = getUsers();
+      if (!users[username] || users[username].password !== password) return alert('Invalid credentials');
+
+      currentUser = username;
+      updateDashboard();
+    }
+
+    function updateDashboard() {
+      const users = getUsers();
+      const user = users[currentUser];
+      if (!user) return logout();
+
+      document.getElementById('dispUser').textContent = currentUser;
+      document.getElementById('balance').textContent = user.balance.toFixed(2);
+
+      document.getElementById('auth').style.display = 'none';
+      document.getElementById('register').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('result').textContent = '';
+      document.getElementById('betAmount').value = '';
+    }
+
+    function placeBet() {
+      const betInput = document.getElementById('betAmount');
+      let amount = parseFloat(betInput.value);
+      if (isNaN(amount) || amount <= 0) return alert('Enter a valid bet amount');
+
+      const users = getUsers();
+      const user = users[currentUser];
+
+      if (user.balance < amount) return alert('Insufficient balance');
+
+      user.balance -= amount;
+
+      const crashPoint = Math.random() * 4 + 1;
+      const cashOut = Math.random() * (crashPoint - 1) + 1;
+      const winnings = amount * cashOut;
+
+      user.balance += winnings;
+
+      saveUsers(users);
+      updateDashboard();
+
+      const resultText = `Crashed at x${crashPoint.toFixed(2)}. You cashed out at x${cashOut.toFixed(2)}. Winnings: ${winnings.toFixed(2)}`;
+      document.getElementById('result').textContent = resultText;
+
+      betInput.value = '';
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('auth').style.display = 'block';
+      document.getElementById('result').textContent = '';
+      document.getElementById('balance').textContent = '';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+  </script>
+</body>
+    </html>
+  </html>
   
   
+
 
 
 
