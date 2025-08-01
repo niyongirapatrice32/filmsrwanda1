@@ -62,7 +62,8 @@
     .film-card:hover {
       transform: scale(1.03);
     }
-    .film-card img {
+    .film-card img,
+    .film-card iframe {
       width: 100%;
       height: 300px;
       object-fit: cover;
@@ -106,7 +107,7 @@
 </head>
 <body>
   <header>
-    <h1>🎬 Welcome to OshaFilm Hub</h1>
+    <h1>🎬 Welcome PATRICE FIMS -FLIME ZIGEZWEHO</h1>
   </header>
 
   <nav>
@@ -124,15 +125,15 @@
         <div class="content">
           <h3>Action Blast</h3>
           <p>Thriller | $9.99</p>
-          <button>Watch Trailer</button>
+          <button onclick="alert('Coming soon...')">Watch Trailer</button>
         </div>
       </div>
       <div class="film-card">
-        <iframe width="100%" height="300" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
         <div class="content">
           <h3>YouTube Teaser</h3>
           <p>Free</p>
-          <button>Watch Now</button>
+          <button onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')">Watch Now</button>
         </div>
       </div>
     </div>
@@ -140,7 +141,27 @@
 
   <section id="latest" class="section">
     <h2>🎞️ Latest Upload</h2>
-    <video controls src="kesari.mp4" width="100%"></video>
+    <div class="film-grid">
+      <div class="film-card">
+        <video controls src="kesari.mp4" width="100%"></video>
+        <div class="content">
+          <h3>KESARI - Local Upload</h3>
+          <p>Drama | Local File</p>
+          <button onclick="alert('Play directly above')">Play</button>
+        </div>
+      </div>
+      <div class="film-card">
+        <video controls width="100%">
+          <source src="https://download2447.mediafire.com/rgxwk40pexqgNQK2VyUDrkkU4fjOA95jtiznFswEG4WoLpRU0r81BzWmA3MOihundGwcc3Ru2xARID6R9Oxjtk6JVlZ8zsbXPUssmK2YUMi-nAX1LWf7dfMWemJ-pWprNRizMmJ1k9g2iM-QPk9a4AKWAjuGJFuHxh0YnLT8qNO8MQ/hl8mjqlacpdg7xb/NIGHT+HAS+COME+E07.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="content">
+          <h3>Night Has Come - Ep 07</h3>
+          <p>Series | Stream from Cloud</p>
+          <button onclick="alert('Play directly above')">Play</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section id="about" class="section about">
@@ -152,11 +173,11 @@
     <h2>📬 Contact</h2>
     <p>For film inquiries, licensing, or partnership opportunities:</p>
     <p>Email: <a href="mailto:niyopat@yahoo.com" style="color:#f90">niyopat@yahoo.com</a></p>
-    <p>WhatsApp: <a href="https://wa.me/250782000000" target="_blank" style="color:#f90">+250 782 000 000</a></p>
+    <p>WhatsApp: <a href="https://wa.me/250783206442" target="_blank" style="color:#f90">+250 782 000 000</a></p>
   </section>
 
   <footer>
-    <p>&copy; 2025 OshaFilm Hub. All rights reserved. | <a href="#" style="color:#888">Privacy Policy</a></p>
+    <p>&copy; 2025 PATRICE FILMS Hub. All rights reserved. | <a href="#" style="color:#888">Privacy Policy</a></p>
   </footer>
 </body>
 </html>
