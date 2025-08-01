@@ -40,7 +40,7 @@
             padding: 1rem;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .film-card img {
+        .film-card img, .film-card iframe {
             width: 100%;
             border-radius: 8px;
         }
@@ -62,9 +62,27 @@
             color: white;
             text-align: center;
             padding: 1rem;
-            position: fixed;
-            bottom: 0;
+            margin-top: 2rem;
+        }
+        form {
+            background-color: white;
+            padding: 1rem;
+            margin: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        form input, form textarea, form button {
+            display: block;
             width: 100%;
+            margin-top: 1rem;
+            padding: 0.5rem;
+        }
+        .contact-section {
+            background-color: #fff;
+            padding: 2rem;
+            margin: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -76,32 +94,73 @@
     <nav>
         <a href="#">Home</a>
         <a href="#">Shop</a>
-        <a href="#">Contact</a>
+        <a href="#upload">Upload Film</a>
+        <a href="#contact">Contact</a>
         <a href="#">Cart</a>
     </nav>
-    <main>
-        <div class="film-card">
-            <img src="https://via.placeholder.com/200x300" alt="Film 1">
-            <h3>Action Movie 1</h3>
-            <p>$9.99</p>
-            <button>Add to Cart</button>
-        </div>
-        <div class="film-card">
-            <img src="https://via.placeholder.com/200x300" alt="Film 2">
-            <h3>Romantic Movie 2</h3>
-            <p>$12.99</p>
-            <button>Add to Cart</button>
-        </div>
-        <div class="film-card">
-            <img src="https://via.placeholder.com/200x300" alt="Film 3">
-            <h3>Comedy Movie 3</h3>
-            <p>$7.99</p>
-            <button>Add to Cart</button>
-        </div>
-        <!-- Add more films as needed -->
+    <main id="film-container">
+        <!-- Films will be loaded here dynamically -->
     </main>
+
+    <form id="upload" onsubmit="addFilm(event)">
+        <h2>Upload New Film</h2>
+        <input type="text" id="title" placeholder="Film Title" required>
+        <input type="text" id="price" placeholder="Price" required>
+        <input type="url" id="image" placeholder="Image or YouTube Embed Link" required>
+        <button type="submit">Upload Film</button>
+    </form>
+
+    <div class="contact-section" id="contact">
+        <h2>Contact Us</h2>
+        <p>If you have any questions or film requests, email us at: <a href="mailto:niyopat@yahoo.com">niyopat@yahoo.com</a></p>
+    </div>
+
     <footer>
         &copy; 2025 FilmMart. All rights reserved.
     </footer>
+
+    <script>
+        const films = [
+            { title: "Action Movie 1", price: "$9.99", image: "https://via.placeholder.com/200x300" },
+            { title: "Romantic Movie 2", price: "$12.99", image: "https://via.placeholder.com/200x300" },
+            { title: "Free Movie Sample (YouTube)", price: "$0.00", image: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ];
+
+        function isYouTubeLink(link) {
+            return link.includes("youtube.com/embed") || link.includes("youtu.be");
+        }
+
+        function loadFilms() {
+            const container = document.getElementById('film-container');
+            container.innerHTML = '';
+            films.forEach(film => {
+                const card = document.createElement('div');
+                card.className = 'film-card';
+                card.innerHTML = `
+                    ${isYouTubeLink(film.image) ? `<iframe src="${film.image}" frameborder="0" allowfullscreen></iframe>` : `<img src="${film.image}" alt="${film.title}">`}
+                    <h3>${film.title}</h3>
+                    <p>${film.price}</p>
+                    <button>Add to Cart</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function addFilm(event) {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            const price = document.getElementById('price').value;
+            const image = document.getElementById('image').value;
+
+            films.push({ title, price, image });
+            loadFilms();
+
+            document.getElementById('title').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('image').value = '';
+        }
+
+        loadFilms();
+    </script>
 </body>
 </html>
