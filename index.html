@@ -82,7 +82,7 @@
     }
     .film-card .content {
       padding: 1rem;
-    }
+    }DOCTYPE
     .film-card h3 {
       margin: 0;
       font-size: 1.2rem;
@@ -208,7 +208,7 @@
 </html> 
 https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg
 
-<!DOCTYPE html>
+<! html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -623,8 +623,166 @@ https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg
 </script>
 
 </body>
-                                    </html>
+              
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aviator Betting Site</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+    }
+    hr {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 Aviator Betting Site</h1>
+
+    <div id="loginSection">
+      <input type="text" id="username" placeholder="Enter username" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <div id="dashboard" style="display: none;">
+      <p>Welcome, <span id="displayName"></span> | 💰 Balance: <span id="balance">0</span> units</p>
+      <button onclick="logout()">Logout</button>
+      <hr />
+
+      <h2>Select a Game</h2>
+      <button onclick="showGame('aviator')">🛩️ Aviator</button>
+      <button onclick="alert('Virtual Football coming soon')">⚽ Virtual Football</button>
+      <button onclick="alert('More games coming soon')">🎰 Slots</button>
+
+      <hr />
+      <div id="aviatorGame" style="display:none;">
+        <h3>Aviator Game</h3>
+        <input type="number" id="betAmount" placeholder="Enter bet" min="1" />
+        <button onclick="startRound()">Start</button>
+        <button onclick="cashOut()" id="cashOutBtn" disabled>Cash Out</button>
+        <p id="aviatorStatus">Multiplier: <span id="multiplier">x1.00</span></p>
+        <p id="aviatorResult"></p>
+      </div>
+
+      <hr />
+      <h2>Deposit via Binance Pay</h2>
+      <p>Send funds to Binance ID: <strong>1143367</strong></p>
+      <img src="https://bin.bnbstatic.com/image/qrcode/bnb.png" alt="Binance QR" width="150" />
+    </div>
+  </div>
+
+  <script>
+    let multiplier = 1.0;
+    let crashPoint = 0;
+    let interval = null;
+    let betAmount = 0;
+
+    function login() {
+      const name = document.getElementById("username").value;
+      if (!name) return alert("Enter username");
+
+      localStorage.setItem("username", name);
+      if (!localStorage.getItem("balance")) localStorage.setItem("balance", "1000");
+
+      document.getElementById("displayName").textContent = name;
+      document.getElementById("balance").textContent = localStorage.getItem("balance");
+
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+    }
+
+    function logout() {
+      localStorage.clear();
+      location.reload();
+    }
+
+    function showGame(game) {
+      if (game === "aviator") {
+        document.getElementById("aviatorGame").style.display = "block";
+      }
+    }
+
+    function updateBalance(amount) {
+      const newBalance = parseFloat(localStorage.getItem("balance")) + amount;
+      localStorage.setItem("balance", newBalance.toFixed(2));
+      document.getElementById("balance").textContent = newBalance.toFixed(2);
+    }
+
+    function startRound() {
+      betAmount = parseFloat(document.getElementById("betAmount").value);
+      let balance = parseFloat(localStorage.getItem("balance"));
+
+      if (!betAmount || betAmount <= 0) return alert("Invalid bet");
+      if (betAmount > balance) return alert("Insufficient balance");
+
+      updateBalance(-betAmount);
+
+      multiplier = 1.0;
+      crashPoint = +(Math.random() * 4 + 1).toFixed(2);
+      document.getElementById("aviatorStatus").innerHTML = `Multiplier: <span id="multiplier">x1.00</span>`;
+      document.getElementById("cashOutBtn").disabled = false;
+      document.getElementById("aviatorResult").textContent = "";
+
+      interval = setInterval(() => {
+        multiplier += 0.05;
+        document.getElementById("multiplier").textContent = "x" + multiplier.toFixed(2);
+
+        if (multiplier >= crashPoint) {
+          clearInterval(interval);
+          document.getElementById("aviatorResult").textContent = `💥 Crashed at x${crashPoint.toFixed(2)}. You lost ${betAmount}!`;
+          document.getElementById("cashOutBtn").disabled = true;
+        }
+      }, 100);
+    }
+
+    function cashOut() {
+      clearInterval(interval);
+      const win = +(betAmount * multiplier).toFixed(2);
+      updateBalance(win);
+      document.getElementById("aviatorResult").textContent = `✅ Cashed out at x${multiplier.toFixed(2)}. You won ${win} units!`;
+      document.getElementById("cashOutBtn").disabled = true;
+    }
+
+    // Auto-login if previously stored
+    window.onload = () => {
+      const name = localStorage.getItem("username");
+      if (name) {
+        document.getElementById("displayName").textContent = name;
+        document.getElementById("balance").textContent = localStorage.getItem("balance");
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+      }
+    }
+  </script>
+</body>
+  </html>
+                                                                       </html>
   
   
+
 
 
