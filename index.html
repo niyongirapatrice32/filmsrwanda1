@@ -47,6 +47,17 @@
       max-width: 1200px;
       margin: auto;
     }
+    .search-bar {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .search-bar input {
+      padding: 0.5rem;
+      width: 60%;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+    }
     .film-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -62,11 +73,11 @@
     .film-card:hover {
       transform: scale(1.03);
     }
-    .film-card img,
+    .film-card video,
     .film-card iframe,
-    .film-card video {
+    .film-card img {
       width: 100%;
-      height: 300px;
+      height: 250px;
       object-fit: cover;
     }
     .film-card .content {
@@ -80,22 +91,23 @@
       font-size: 0.9rem;
       color: #ccc;
     }
-    .film-card button,
-    .film-card a.download {
-      display: inline-block;
-      margin-top: 1rem;
+    .film-card a,
+    .film-card button {
+      margin-top: 0.5rem;
+      display: block;
       width: 100%;
       padding: 0.7rem;
       background-color: #f90;
       color: black;
+      text-align: center;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      text-align: center;
       text-decoration: none;
+      font-weight: bold;
     }
     .film-card button:hover,
-    .film-card a.download:hover {
+    .film-card a:hover {
       background-color: #ffb300;
     }
     footer {
@@ -109,29 +121,11 @@
       padding: 2rem;
       border-radius: 10px;
     }
-    #searchBar {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      border-radius: 5px;
-      border: none;
-    }
   </style>
-  <script>
-    function searchFilms() {
-      const input = document.getElementById('searchBar').value.toLowerCase();
-      const cards = document.querySelectorAll('.film-card');
-      cards.forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = title.includes(input) ? '' : 'none';
-      });
-    }
-  </script>
 </head>
 <body>
   <header>
-    <h1>🎬 Welcome to PATRICE FILMS - FLIME ZIGEZWEHO </h1>
+    <h1>🎬 Welcome toPATRICE FILMS- FILM ZIGEZWEHO</h1>
   </header>
 
   <nav>
@@ -141,76 +135,42 @@
     <a href="#contact">Contact</a>
   </nav>
 
-  <section class="section">
-    <input type="text" id="searchBar" onkeyup="searchFilms()" placeholder="Search for a film...">
-  </section>
-
   <section id="trending" class="section">
     <h2>🔥 Trending Films</h2>
-    <div class="film-grid">
-      <div class="film-card">
-        <img src="https://via.placeholder.com/300x400?text=Film+1" alt="Film 1">
-        <div class="content">
-          <h3>Action Blast</h3>
-          <p>Thriller | $9.99</p>
-          <button>Watch Trailer</button>
-          <a class="download" href="#">Download</a>
-        </div>
-      </div>
-      <div class="film-card">
-        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
-        <div class="content">
-          <h3>YouTube Teaser</h3>
-          <p>Free</p>
-          <button>Watch Now</button>
-          <a class="download" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Download</a>
-        </div>
-      </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search films..." onkeyup="filterFilms()">
     </div>
-  </section>
-
-  <section id="latest" class="section">
-    <h2>🎞️ Latest Upload</h2>
-    <div class="film-grid">
+    <div class="film-grid" id="filmGrid">
       <div class="film-card">
         <video controls src="kesari.mp4"></video>
         <div class="content">
           <h3>Kesari</h3>
-          <p>Historical Action</p>
-          <a class="download" href="kesari.mp4" download>Download</a>
+          <p>Action | Free</p>
+          <a href="kesari.mp4" download>Download</a>
         </div>
       </div>
-
       <div class="film-card">
-        <video controls>
-          <source src="https://download2447.mediafire.com/.../NIGHT+HAS+COME+E07.mp4" type="video/mp4">
-        </video>
+        <video controls src="https://download2447.mediafire.com/rgxwk40pexqgNQK2VyUDrkkU4fjOA95jtiznFswEG4WoLpRU0r81BzWmA3MOihundGwcc3Ru2xARID6R9Oxjtk6JVlZ8zsbXPUssmK2YUMi-nAX1LWf7dfMWemJ-pWprNRizMmJ1k9g2iM-QPk9a4AKWAjuGJFuHxh0YnLT8qNO8MQ/hl8mjqlacpdg7xb/NIGHT+HAS+COME+E07.mp4"></video>
         <div class="content">
-          <h3>Night Has Come – Ep07</h3>
-          <p>Drama</p>
-          <a class="download" href="https://download2447.mediafire.com/.../NIGHT+HAS+COME+E07.mp4" download>Download</a>
+          <h3>Night Has Come - E07</h3>
+          <p>Drama | Free</p>
+          <a href="https://download2447.mediafire.com/rgxwk40pexqgNQK2VyUDrkkU4fjOA95jtiznFswEG4WoLpRU0r81BzWmA3MOihundGwcc3Ru2xARID6R9Oxjtk6JVlZ8zsbXPUssmK2YUMi-nAX1LWf7dfMWemJ-pWprNRizMmJ1k9g2iM-QPk9a4AKWAjuGJFuHxh0YnLT8qNO8MQ/hl8mjqlacpdg7xb/NIGHT+HAS+COME+E07.mp4" download>Download</a>
         </div>
       </div>
-
       <div class="film-card">
-        <video controls>
-          <source src="https://download2324.mediafire.com/.../Brick_by_sankara.mp4" type="video/mp4">
-        </video>
+        <video controls src="https://download2324.mediafire.com/wpnbpln1y3qg6qzTqtv0rmmyT7L3yKBLcPm7FOEzzra163ispOJ12hNPrLeVnqIa-c-vK9e8QRtkeY6LigLGa_-muF37U4811noI_uzUOBjo0DrDmNEWS_b9K1wGfXIURKEFwHxtljn6y2KcJ0nWgLsqp5sYz-2BFw3kTgOjNj8yFg/lc2jow07gtv68x8/Brick_by_sankara.mp4"></video>
         <div class="content">
           <h3>Brick by Sankara</h3>
-          <p>Action</p>
-          <a class="download" href="https://download2324.mediafire.com/.../Brick_by_sankara.mp4" download>Download</a>
+          <p>Drama | Free</p>
+          <a href="https://download2324.mediafire.com/wpnbpln1y3qg6qzTqtv0rmmyT7L3yKBLcPm7FOEzzra163ispOJ12hNPrLeVnqIa-c-vK9e8QRtkeY6LigLGa_-muF37U4811noI_uzUOBjo0DrDmNEWS_b9K1wGfXIURKEFwHxtljn6y2KcJ0nWgLsqp5sYz-2BFw3kTgOjNj8yFg/lc2jow07gtv68x8/Brick_by_sankara.mp4" download>Download</a>
         </div>
       </div>
-
       <div class="film-card">
-        <video controls>
-          <source src="https://download2390.mediafire.com/.../Halloween_Kills_Sankara.mp4" type="video/mp4">
-        </video>
+        <video controls src="https://download2390.mediafire.com/cnm6s4oi8h6gPe7Gubp618jepFzXH4SLXuN68TK0622RwxVYrug4SSv3Ck-sCl1qFT6UfWDhv7k2sHnYlp_HcZFnm-tg4_o6ZniZLLKCy-PyRV37bMdw-G0StbqnSjJEaY3v_k6FkfX6WgivAdo8mHJhnXaZ18S6Ifc2WIyTVJpCgQ/439fapt2hfal7bl/Halloween_Kills_Sankara.mp4"></video>
         <div class="content">
-          <h3>Halloween Kills</h3>
-          <p>Horror</p>
-          <a class="download" href="https://download2390.mediafire.com/.../Halloween_Kills_Sankara.mp4" download>Download</a>
+          <h3>Halloween Kills Sankara</h3>
+          <p>Horror | Free</p>
+          <a href="https://download2390.mediafire.com/cnm6s4oi8h6gPe7Gubp618jepFzXH4SLXuN68TK0622RwxVYrug4SSv3Ck-sCl1qFT6UfWDhv7k2sHnYlp_HcZFnm-tg4_o6ZniZLLKCy-PyRV37bMdw-G0StbqnSjJEaY3v_k6FkfX6WgivAdo8mHJhnXaZ18S6Ifc2WIyTVJpCgQ/439fapt2hfal7bl/Halloween_Kills_Sankara.mp4" download>Download</a>
         </div>
       </div>
     </div>
@@ -225,11 +185,24 @@
     <h2>📬 Contact</h2>
     <p>For film inquiries, licensing, or partnership opportunities:</p>
     <p>Email: <a href="mailto:niyopat@yahoo.com" style="color:#f90">niyopat@yahoo.com</a></p>
-    <p>WhatsApp: <a href="https://wa.me/250783206442" target="_blank" style="color:#f90">+250 782 000 000</a></p>
+    <p>WhatsApp: <a href="https://wa.me/250782000000" target="_blank" style="color:#f90">+250 782 000 000</a></p>
   </section>
 
   <footer>
-    <p>&copy; 2025 PATRICE FILMS  Hub. All rights reserved. | <a href="#" style="color:#888">Privacy Policy</a></p>
+    <p>&copy; 2025 PATRICE FILMS. All rights reserved. | <a href="#" style="color:#888">Privacy Policy</a></p>
   </footer>
+
+  <script>
+    function filterFilms() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toLowerCase();
+      const cards = document.querySelectorAll('#filmGrid .film-card');
+
+      cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = title.includes(filter) ? 'block' : 'none';
+      });
+    }
+  </script>
 </body>
 </html>
