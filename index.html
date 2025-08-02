@@ -1,926 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OshaFilm Hub</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #111;
-      color: #fff;
+      margin: 0; font-family: 'Segoe UI', sans-serif;
+      background-color: #111; color: #eee;
     }
-    header {
-      background: url('https://via.placeholder.com/1600x500?text=Featured+Film') center/cover no-repeat;
-      height: 70vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
-      padding: 2rem;
-    }
-    header h1 {
-      font-size: 3rem;
-      background-color: rgba(0,0,0,0.6);
-      padding: 1rem;
-      border-radius: 10px;
-    }
-    nav {
-      display: flex;
-      justify-content: space-around;
-      background-color: #222;
-      padding: 1rem;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-    nav a:hover {
-      color: #f90;
-    }
-    .section {
-      padding: 3rem 2rem;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .search-bar {
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .search-bar input {
-      padding: 0.5rem;
-      width: 60%;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-    }
-    .film-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    .film-card {
-      background-color: #1c1c1c;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.6);
-      transition: transform 0.3s;
-    }
-    .film-card:hover {
-      transform: scale(1.03);
-    }
-    .film-card video,
-    .film-card iframe,
-    .film-card img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-    }
-    .film-card .content {
-      padding: 1rem;
-    }DOCTYPE
-    .film-card h3 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-    .film-card p {
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-    .film-card a,
-    .film-card button {
-      margin-top: 0.5rem;
-      display: block;
-      width: 100%;
-      padding: 0.7rem;
-      background-color: #f90;
-      color: black;
-      text-align: center;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .film-card button:hover,
-    .film-card a:hover {
-      background-color: #ffb300;
-    }
-    footer {
-      background-color: #000;
-      color: #aaa;
-      padding: 2rem;
-      text-align: center;
-    }
-    .contact, .about {
-      background-color: #1a1a1a;
-      padding: 2rem;
-      border-radius: 10px;
-    }
+    header { padding: 2rem; text-align: center; color: #f90; background: #222; }
+    nav { display: flex; justify-content: center; background: #333; }
+    nav a { color: #ccc; margin: 0 1rem; padding: .5rem; text-decoration: none; }
+    nav a:hover { color: #f90; }
+    .search-bar { padding: 2rem; text-align: center; background: #111; }
+    .search-bar input { width: 60%; padding: .8rem; font-size: 1rem; border-radius: 5px; border: none; }
+    .films { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 2rem; padding: 2rem; }
+    .card { background: #222; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+    .card img { width: 100%; height: 200px; object-fit: cover; }
+    .card .content { padding: 1rem; }
+    .card h3 { margin: 0; font-size: 1.25rem; color: #f90; }
+    .card p { color: #aaa; margin: .5rem 0; }
+    .card a.button { display: block; background: #f90; color: #111; padding: .7rem;
+                     text-align: center; text-decoration: none; border-radius: 5px; margin-top: .5rem; }
+    .card a.button:hover { background: #ffb343; }
+    footer { text-align: center; padding: 2rem; background: #000; color: #666; }
   </style>
+  <script>
+    const films = [
+      {
+        title: 'Kesari',
+        img: 'https://via.placeholder.com/300x200?text=Kesari',
+        video: 'kesari.mp4'
+      },
+      {
+        title: 'Night Has Come – Ep07',
+        img: 'https://via.placeholder.com/300x200?text=Night+Has+Come',
+        video: 'https://download2447.mediafire.com/.../NIGHT+HAS+COME+E07.mp4'
+      },
+      {
+        title: 'Brick by Sankara',
+        img: 'https://via.placeholder.com/300x200?text=Brick+by+Sankara',
+        video: 'https://download2324.mediafire.com/.../Brick_by_sankara.mp4'
+      },
+      {
+        title: 'Halloween Kills Sankara',
+        img: 'https://via.placeholder.com/300x200?text=Halloween+Kills',
+        video: 'https://www.mediafire.com/file/1cr2hyeqxfu20l2/Halloween_Kills_Sankara.mp4/file'
+      }
+    ];
+
+    function loadFilms() {
+      const grid = document.querySelector('.films');
+      grid.innerHTML = '';
+      films.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+          <img src="${f.img}" alt="${f.title}">
+          <div class="content">
+            <h3>${f.title}</h3>
+            <a class="button" href="${f.video}" download>Download</a>
+          </div>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function filterFilms() {
+      const q = document.getElementById('search').value.toLowerCase();
+      document.querySelectorAll('.card').forEach(card => {
+        const txt = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = txt.includes(q) ? 'block' : 'none';
+      });
+    }
+
+    window.onload = loadFilms;
+  </script>
 </head>
 <body>
-  <header>
-    <h1>🎬 PATRICE FILMS- FILIME ZIGEZWEHO </h1>
-  </header>
 
+  <header>
+    <h1>OshaFilm Hub</h1>
+    <p>Your source for African & Global Cinema</p>
+  </header>
   <nav>
-    <a href="#trending">Trending</a>
-    <a href="#latest">Latest</a>
+    <a href="#search">Home</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </nav>
 
-  <section id="trending" class="section">
-    <h2>🔥 Trending Films</h2>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search films..." onkeyup="filterFilms()">
-    </div>
-    <div class="film-grid" id="filmGrid">
-      <div class="film-card">
-        <video controls src="kesari.mp4"></video>
-        <div class="content">
-          <h3>Kesari</h3>
-          <p>Action | Free</p>
-          <a href="kesari.mp4" download>Download</a>
-        </div>
-      </div>
-      <div class="film-card">
-        <video controls src="https://download2447.mediafire.com/rgxwk40pexqgNQK2VyUDrkkU4fjOA95jtiznFswEG4WoLpRU0r81BzWmA3MOihundGwcc3Ru2xARID6R9Oxjtk6JVlZ8zsbXPUssmK2YUMi-nAX1LWf7dfMWemJ-pWprNRizMmJ1k9g2iM-QPk9a4AKWAjuGJFuHxh0YnLT8qNO8MQ/hl8mjqlacpdg7xb/NIGHT+HAS+COME+E07.mp4"></video>
-        <div class="content">
-          <h3>Night Has Come - E07</h3>
-          <p>Drama | Free</p>
-          <a href="https://download2447.mediafire.com/rgxwk40pexqgNQK2VyUDrkkU4fjOA95jtiznFswEG4WoLpRU0r81BzWmA3MOihundGwcc3Ru2xARID6R9Oxjtk6JVlZ8zsbXPUssmK2YUMi-nAX1LWf7dfMWemJ-pWprNRizMmJ1k9g2iM-QPk9a4AKWAjuGJFuHxh0YnLT8qNO8MQ/hl8mjqlacpdg7xb/NIGHT+HAS+COME+E07.mp4" download>Download</a>
-        </div>
-      </div>
-      <div class="film-card">
-        <video controls src="https://download2324.mediafire.com/wpnbpln1y3qg6qzTqtv0rmmyT7L3yKBLcPm7FOEzzra163ispOJ12hNPrLeVnqIa-c-vK9e8QRtkeY6LigLGa_-muF37U4811noI_uzUOBjo0DrDmNEWS_b9K1wGfXIURKEFwHxtljn6y2KcJ0nWgLsqp5sYz-2BFw3kTgOjNj8yFg/lc2jow07gtv68x8/Brick_by_sankara.mp4"></video>
-        <div class="content">
-          <h3>Brick by Sankara</h3>
-          <p>Drama | Free</p>
-          <a href="https://download2324.mediafire.com/wpnbpln1y3qg6qzTqtv0rmmyT7L3yKBLcPm7FOEzzra163ispOJ12hNPrLeVnqIa-c-vK9e8QRtkeY6LigLGa_-muF37U4811noI_uzUOBjo0DrDmNEWS_b9K1wGfXIURKEFwHxtljn6y2KcJ0nWgLsqp5sYz-2BFw3kTgOjNj8yFg/lc2jow07gtv68x8/Brick_by_sankara.mp4" download>Download</a>
-        </div>
-      </div>
-      <div class="film-card">
-        <video controls src="https://download2390.mediafire.com/cnm6s4oi8h6gPe7Gubp618jepFzXH4SLXuN68TK0622RwxVYrug4SSv3Ck-sCl1qFT6UfWDhv7k2sHnYlp_HcZFnm-tg4_o6ZniZLLKCy-PyRV37bMdw-G0StbqnSjJEaY3v_k6FkfX6WgivAdo8mHJhnXaZ18S6Ifc2WIyTVJpCgQ/439fapt2hfal7bl/Halloween_Kills_Sankara.mp4"></video>
-        <div class="content">
-          <h3>Halloween Kills Sankara</h3>
-          <p>Horror | Free</p>
-          <a href="https://download2390.mediafire.com/cnm6s4oi8h6gPe7Gubp618jepFzXH4SLXuN68TK0622RwxVYrug4SSv3Ck-sCl1qFT6UfWDhv7k2sHnYlp_HcZFnm-tg4_o6ZniZLLKCy-PyRV37bMdw-G0StbqnSjJEaY3v_k6FkfX6WgivAdo8mHJhnXaZ18S6Ifc2WIyTVJpCgQ/439fapt2hfal7bl/Halloween_Kills_Sankara.mp4" download>Download</a>
-        </div>
-      </div>
-    </div>
+  <section id="search" class="search-bar">
+    <input type="text" id="search" placeholder="Search films..." onkeyup="filterFilms()">
   </section>
 
-  <section id="about" class="section about">
-    <h2>📖 About Us</h2>
-    <p>OshaFilm Hub is your home for African cinema and global entertainment. We provide high-quality movies in various genres including romance, action, and drama. Our mission is to connect filmmakers with global audiences.</p>
-  </section>
+  <section class="films"></section>
 
-  <section id="contact" class="section contact">
-    <h2>📬 Contact</h2>
-    <p>For film inquiries, licensing, or partnership opportunities:</p>
+  <section id="about" class="search-bar">
+    <h2>About Us</h2>
+    <p>OshaFilm Hub is your home for African cinema and global entertainment. Our curated collection spans multiple genres, delivered in high quality.</p>
+  </section>
+  <section id="contact" class="search-bar">
+    <h2>Contact</h2>
     <p>Email: <a href="mailto:niyopat@yahoo.com" style="color:#f90">niyopat@yahoo.com</a></p>
-    <p>WhatsApp: <a href="https://wa.me/250782000000" target="_blank" style="color:#f90">+250 782 000 000</a></p>
+    <p>WhatsApp: <a href="https://wa.me/250782000000" target="_blank" style="color:#f90">+250 782 000 000</a></p>
   </section>
 
   <footer>
-    <p>&copy; 2025 PATRICE FILMS. All rights reserved. | <a href="#" style="color:#888">Privacy Policy</a></p>
+    &copy; 2025 OshaFilm Hub — All rights reserved
   </footer>
 
-  <script>
-    function filterFilms() {
-      const input = document.getElementById('searchInput');
-      const filter = input.value.toLowerCase();
-      const cards = document.querySelectorAll('#filmGrid .film-card');
-
-      cards.forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = title.includes(filter) ? 'block' : 'none';
-      });
-    }
-  </script>
 </body>
-</html> 
-https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg
-
-<! html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Aviator Betting Game Demo</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    max-width: 400px;
-    margin: 40px auto;
-    text-align: center;
-  }
-  input, button {
-    padding: 10px;
-    font-size: 16px;
-    margin: 5px;
-  }
-  #multiplier {
-    font-size: 48px;
-    margin: 20px 0;
-    color: green;
-  }
-  #status, #balance {
-    font-size: 20px;
-    margin: 20px 0;
-  }
-</style>
-</head>
-<body>
-
-<h1>Aviator Betting Game Demo</h1>
-
-<div id="balance">Balance: 1000.00 units</div>
-
-<label for="betAmount">Enter your bet:</label><br />
-<input type="number" id="betAmount" min="1" value="10" /><br />
-
-<button id="startBtn">Start Round</button>
-<button id="cashoutBtn" disabled>Cash Out</button>
-
-<div id="multiplier">x1.00</div>
-<div id="status"></div>
-
-<script>
-  let balance = 1000.0;
-  const startBtn = document.getElementById('startBtn');
-  const cashoutBtn = document.getElementById('cashoutBtn');
-  const multiplierDisplay = document.getElementById('multiplier');
-  const statusDisplay = document.getElementById('status');
-  const betInput = document.getElementById('betAmount');
-  const balanceDisplay = document.getElementById('balance');
-
-  let multiplier = 1.0;
-  let intervalId = null;
-  let crashed = false;
-  let crashPoint = 0;
-  let bet = 0;
-  let cashoutMultiplier = 0;
-
-  function getRandomCrashPoint() {
-    return +(Math.random() * 9 + 1).toFixed(2);
-  }
-
-  function updateBalanceDisplay() {
-    balanceDisplay.textContent = 'Balance: ' + balance.toFixed(2) + ' units';
-  }
-
-  function startRound() {
-    bet = parseFloat(betInput.value);
-    if (isNaN(bet) || bet <= 0) {
-      alert('Please enter a valid bet amount greater than 0.');
-      return;
-    }
-    if (bet > balance) {
-      alert('Insufficient balance!');
-      return;
-    }
-
-    balance -= bet;
-    updateBalanceDisplay();
-
-    multiplier = 1.0;
-    crashed = false;
-    crashPoint = getRandomCrashPoint();
-    cashoutMultiplier = 0;
-
-    multiplierDisplay.textContent = 'x1.00';
-    statusDisplay.textContent = 'Game started!';
-
-    startBtn.disabled = true;
-    cashoutBtn.disabled = false;
-    betInput.disabled = true;
-
-    intervalId = setInterval(() => {
-      multiplier += 0.05;
-      multiplierDisplay.textContent = 'x' + multiplier.toFixed(2);
-
-      if (multiplier >= crashPoint) {
-        clearInterval(intervalId);
-        crashed = true;
-        cashoutBtn.disabled = true;
-        startBtn.disabled = false;
-        betInput.disabled = false;
-        multiplierDisplay.textContent = 'CRASHED at x' + crashPoint.toFixed(2);
-        statusDisplay.textContent = 'You lost your bet of ' + bet.toFixed(2) + ' units!';
-      }
-    }, 100);
-  }
-
-  function cashOut() {
-    if (crashed) return;
-
-    cashoutMultiplier = multiplier;
-    clearInterval(intervalId);
-    cashoutBtn.disabled = true;
-    startBtn.disabled = false;
-    betInput.disabled = false;
-
-    const winnings = +(bet * cashoutMultiplier).toFixed(2);
-    balance += winnings;
-    updateBalanceDisplay();
-
-    multiplierDisplay.textContent = 'Cashed out at x' + cashoutMultiplier.toFixed(2);
-    statusDisplay.textContent = 'You won ' + winnings.toFixed(2) + ' units!';
-  }
-
-  startBtn.addEventListener('click', startRound);
-  cashoutBtn.addEventListener('click', cashOut);
-
-  updateBalanceDisplay();
-</script>
-
-</body>
-  </html>
-<!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aviator Betting Game - Virtual Demo</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      background: #1a1a2e;
-      font-family: 'Poppins', sans-serif;
-      color: #f0f0f0;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    h1 {
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: #f39c12;
-      text-shadow: 0 0 8px #f39c12;
-    }
-    .balance {
-      font-size: 22px;
-      margin-bottom: 20px;
-      padding: 10px 20px;
-      background: #16213e;
-      border-radius: 8px;
-      width: 280px;
-      text-align: center;
-      box-shadow: 0 0 10px #f39c12aa;
-      user-select: none;
-    }
-    .bet-container {
-      background: #16213e;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #f39c12bb;
-      width: 320px;
-      margin-bottom: 25px;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    input[type=number] {
-      width: 100%;
-      padding: 10px;
-      font-size: 18px;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-      margin-bottom: 12px;
-      color: #1a1a2e;
-      font-weight: 600;
-    }
-    button {
-      width: 100%;
-      padding: 14px;
-      font-size: 18px;
-      font-weight: 700;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #f39c12;
-      color: #1a1a2e;
-      box-shadow: 0 0 15px #f39c12;
-      transition: background-color 0.3s ease;
-      user-select: none;
-    }
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-    button:hover:not(:disabled) {
-      background: #d48806;
-    }
-    .game-area {
-      background: #0f3460;
-      border-radius: 15px;
-      width: 320px;
-      height: 150px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 20px #53354a;
-      user-select: none;
-      position: relative;
-      overflow: hidden;
-    }
-    .multiplier {
-      font-size: 60px;
-      font-weight: 900;
-      color: #f39c12;
-      text-shadow: 0 0 12px #f39c12, 0 0 25px #f39c12;
-      margin: 0;
-      user-select: none;
-    }
-    .status {
-      font-size: 20px;
-      margin-top: 10px;
-      font-weight: 600;
-      min-height: 28px;
-    }
-    /* Plane animation */
-    .plane {
-      position: absolute;
-      bottom: 10px;
-      left: 0;
-      width: 40px;
-      height: 40px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Jet_plane_icon.svg') no-repeat center center;
-      background-size: contain;
-      transition: left 0.1s linear;
-      filter: drop-shadow(0 0 3px #f39c12);
-      user-select: none;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>Aviator Betting Game</h1>
-
-  <div class="balance" id="balance">Balance: 1000.00 units</div>
-
-  <div class="bet-container">
-    <label for="betAmount">Enter your bet amount</label>
-    <input type="number" id="betAmount" min="1" step="1" value="10" />
-    <button id="startBtn">Start Round</button>
-    <button id="cashoutBtn" disabled>Cash Out</button>
-  </div>
-
-  <div class="game-area" id="gameArea">
-    <div class="plane" id="plane"></div>
-    <p class="multiplier" id="multiplier">x1.00</p>
-    <p class="status" id="status"></p>
-  </div>
-
-<script>
-  const balanceEl = document.getElementById('balance');
-  const betInput = document.getElementById('betAmount');
-  const startBtn = document.getElementById('startBtn');
-  const cashoutBtn = document.getElementById('cashoutBtn');
-  const multiplierEl = document.getElementById('multiplier');
-  const statusEl = document.getElementById('status');
-  const planeEl = document.getElementById('plane');
-  const gameAreaEl = document.getElementById('gameArea');
-
-  let balance = 1000.0;
-  let bet = 0;
-  let multiplier = 1.0;
-  let crashPoint = 0;
-  let intervalId = null;
-  let crashed = false;
-
-  // Update balance display
-  function updateBalance() {
-    balanceEl.textContent = `Balance: ${balance.toFixed(2)} units`;
-  }
-
-  // Generate random crash multiplier between 1.0 and 15.0 (more dynamic)
-  function generateCrashPoint() {
-    // Using a weighted randomness for better game feel
-    let p = Math.random();
-    if (p < 0.6) return +(Math.random() * 3 + 1).toFixed(2); // 1.0 to 4.0 (60%)
-    if (p < 0.85) return +(Math.random() * 6 + 4).toFixed(2); // 4.0 to 10.0 (25%)
-    return +(Math.random() * 5 + 10).toFixed(2);              // 10.0 to 15.0 (15%)
-  }
-
-  // Reset game UI state
-  function resetGame() {
-    multiplier = 1.0;
-    crashed = false;
-    multiplierEl.textContent = 'x1.00';
-    statusEl.textContent = '';
-    planeEl.style.left = '0px';
-    cashoutBtn.disabled = true;
-    startBtn.disabled = false;
-    betInput.disabled = false;
-  }
-
-  // Animate the multiplier and plane position
-  function startGameLoop() {
-    const gameWidth = gameAreaEl.clientWidth - planeEl.clientWidth;
-    intervalId = setInterval(() => {
-      multiplier += 0.05;
-
-      multiplierEl.textContent = `x${multiplier.toFixed(2)}`;
-
-      // Move plane from left to right proportional to multiplier (up to crash)
-      let planePos = Math.min(gameWidth * (multiplier / crashPoint), gameWidth);
-      planeEl.style.left = `${planePos}px`;
-
-      if (multiplier >= crashPoint) {
-        clearInterval(intervalId);
-        crashed = true;
-        cashoutBtn.disabled = true;
-        startBtn.disabled = false;
-        betInput.disabled = false;
-
-        multiplierEl.textContent = `CRASHED at x${crashPoint.toFixed(2)}`;
-        statusEl.textContent = `You lost your bet of ${bet.toFixed(2)} units!`;
-      }
-    }, 50);
-  }
-
-  // Start round handler
-  function startRound() {
-    bet = parseFloat(betInput.value);
-    if (isNaN(bet) || bet <= 0) {
-      alert('Please enter a valid bet amount greater than 0.');
-      return;
-    }
-    if (bet > balance) {
-      alert('Insufficient balance!');
-      return;
-    }
-
-    balance -= bet;
-    updateBalance();
-
-    crashPoint = generateCrashPoint();
-
-    multiplier = 1.0;
-    crashed = false;
-
-    multiplierEl.textContent = 'x1.00';
-    statusEl.textContent = 'Game started! Cash out before it crashes.';
-    planeEl.style.left = '0px';
-
-    startBtn.disabled = true;
-    cashoutBtn.disabled = false;
-    betInput.disabled = true;
-
-    startGameLoop();
-  }
-
-  // Cashout handler
-  function cashOut() {
-    if (crashed) return;
-    clearInterval(intervalId);
-
-    cashoutBtn.disabled = true;
-    startBtn.disabled = false;
-    betInput.disabled = false;
-
-    const winnings = +(bet * multiplier).toFixed(2);
-    balance += winnings;
-    updateBalance();
-
-    multiplierEl.textContent = `Cashed out at x${multiplier.toFixed(2)}`;
-    statusEl.textContent = `You won ${winnings.toFixed(2)} units!`;
-  }
-
-  startBtn.addEventListener('click', startRound);
-  cashoutBtn.addEventListener('click', cashOut);
-
-  updateBalance();
-
-  // Bonus: Prevent form submit on Enter key press
-  betInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      startRound();
-    }
-  });
-</script>
-
-</body>
-              
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aviator Betting Site</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      text-align: center;
-      padding: 20px;
-    }
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
-    }
-    button {
-      cursor: pointer;
-    }
-    hr {
-      margin: 20px 0;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🎮 Aviator Betting Site</h1>
-
-    <div id="loginSection">
-      <input type="text" id="username" placeholder="Enter username" />
-      <button onclick="login()">Login</button>
-    </div>
-
-    <div id="dashboard" style="display: none;">
-      <p>Welcome, <span id="displayName"></span> | 💰 Balance: <span id="balance">0</span> units</p>
-      <button onclick="logout()">Logout</button>
-      <hr />
-
-      <h2>Select a Game</h2>
-      <button onclick="showGame('aviator')">🛩️ Aviator</button>
-      <button onclick="alert('Virtual Football coming soon')">⚽ Virtual Football</button>
-      <button onclick="alert('More games coming soon')">🎰 Slots</button>
-
-      <hr />
-      <div id="aviatorGame" style="display:none;">
-        <h3>Aviator Game</h3>
-        <input type="number" id="betAmount" placeholder="Enter bet" min="1" />
-        <button onclick="startRound()">Start</button>
-        <button onclick="cashOut()" id="cashOutBtn" disabled>Cash Out</button>
-        <p id="aviatorStatus">Multiplier: <span id="multiplier">x1.00</span></p>
-        <p id="aviatorResult"></p>
-      </div>
-
-      <hr />
-      <h2>Deposit via Binance Pay</h2>
-      <p>Send funds to Binance ID: <strong>1143367</strong></p>
-      <img src="https://bin.bnbstatic.com/image/qrcode/bnb.png" alt="Binance QR" width="150" />
-    </div>
-  </div>
-
-  <script>
-    let multiplier = 1.0;
-    let crashPoint = 0;
-    let interval = null;
-    let betAmount = 0;
-
-    function login() {
-      const name = document.getElementById("username").value;
-      if (!name) return alert("Enter username");
-
-      localStorage.setItem("username", name);
-      if (!localStorage.getItem("balance")) localStorage.setItem("balance", "1000");
-
-      document.getElementById("displayName").textContent = name;
-      document.getElementById("balance").textContent = localStorage.getItem("balance");
-
-      document.getElementById("loginSection").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
-    }
-
-    function logout() {
-      localStorage.clear();
-      location.reload();
-    }
-
-    function showGame(game) {
-      if (game === "aviator") {
-        document.getElementById("aviatorGame").style.display = "block";
-      }
-    }
-
-    function updateBalance(amount) {
-      const newBalance = parseFloat(localStorage.getItem("balance")) + amount;
-      localStorage.setItem("balance", newBalance.toFixed(2));
-      document.getElementById("balance").textContent = newBalance.toFixed(2);
-    }
-
-    function startRound() {
-      betAmount = parseFloat(document.getElementById("betAmount").value);
-      let balance = parseFloat(localStorage.getItem("balance"));
-
-      if (!betAmount || betAmount <= 0) return alert("Invalid bet");
-      if (betAmount > balance) return alert("Insufficient balance");
-
-      updateBalance(-betAmount);
-
-      multiplier = 1.0;
-      crashPoint = +(Math.random() * 4 + 1).toFixed(2);
-      document.getElementById("aviatorStatus").innerHTML = `Multiplier: <span id="multiplier">x1.00</span>`;
-      document.getElementById("cashOutBtn").disabled = false;
-      document.getElementById("aviatorResult").textContent = "";
-
-      interval = setInterval(() => {
-        multiplier += 0.05;
-        document.getElementById("multiplier").textContent = "x" + multiplier.toFixed(2);
-
-        if (multiplier >= crashPoint) {
-          clearInterval(interval);
-          document.getElementById("aviatorResult").textContent = `💥 Crashed at x${crashPoint.toFixed(2)}. You lost ${betAmount}!`;
-          document.getElementById("cashOutBtn").disabled = true;
-        }
-      }, 100);
-    }
-
-    function cashOut() {
-      clearInterval(interval);
-      const win = +(betAmount * multiplier).toFixed(2);
-      updateBalance(win);
-      document.getElementById("aviatorResult").textContent = `✅ Cashed out at x${multiplier.toFixed(2)}. You won ${win} units!`;
-      document.getElementById("cashOutBtn").disabled = true;
-    }
-
-    // Auto-login if previously stored
-    window.onload = () => {
-      const name = localStorage.getItem("username");
-      if (name) {
-        document.getElementById("displayName").textContent = name;
-        document.getElementById("balance").textContent = localStorage.getItem("balance");
-        document.getElementById("loginSection").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
-      }
-    }
-  </script>
-</body>
-  </html>
-                  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>AviatorBet Offline Demo</title>
-  <style>
-    body { font-family: Arial; max-width: 400px; margin: auto; padding: 20px; }
-    input, button { margin: 5px 0; padding: 10px; width: 100%; }
-    #dashboard, #register { display: none; }
-    #result { margin-top: 10px; font-weight: bold; }
-  </style>
-</head>
-<body>
-  <h1>AviatorBet Offline Demo</h1>
-
-  <div id="auth">
-    <h3>Login</h3>
-    <input id="username" placeholder="Username" />
-    <input id="password" type="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
-    <p>Or <a href="#" onclick="showRegister()">Register</a></p>
-  </div>
-
-  <div id="register">
-    <h3>Register</h3>
-    <input id="regUsername" placeholder="Username" />
-    <input id="regPassword" type="password" placeholder="Password" />
-    <button onclick="register()">Register</button>
-    <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
-  </div>
-
-  <div id="dashboard">
-    <h3>Welcome, <span id="dispUser"></span></h3>
-    <p>Balance: <span id="balance"></span> units</p>
-    <input id="betAmount" type="number" placeholder="Enter Bet Amount" />
-    <button onclick="placeBet()">Place Bet</button>
-    <button onclick="logout()">Logout</button>
-    <p id="result"></p>
-  </div>
-
-  <script>
-    function getUsers() {
-      return JSON.parse(localStorage.getItem('users') || '{}');
-    }
-    function saveUsers(users) {
-      localStorage.setItem('users', JSON.stringify(users));
-    }
-
-    let currentUser = null;
-
-    function showRegister() {
-      document.getElementById('auth').style.display = 'none';
-      document.getElementById('register').style.display = 'block';
-    }
-    function showLogin() {
-      document.getElementById('auth').style.display = 'block';
-      document.getElementById('register').style.display = 'none';
-    }
-
-    function register() {
-      const username = document.getElementById('regUsername').value.trim();
-      const password = document.getElementById('regPassword').value.trim();
-      if (!username || !password) return alert('Fill all fields');
-      const users = getUsers();
-      if (users[username]) return alert('Username taken');
-
-      users[username] = { password, balance: 1000 };
-      saveUsers(users);
-      alert('Registered! You can now login.');
-      showLogin();
-    }
-
-    function login() {
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
-      if (!username || !password) return alert('Fill all fields');
-      const users = getUsers();
-      if (!users[username] || users[username].password !== password) return alert('Invalid credentials');
-
-      currentUser = username;
-      updateDashboard();
-    }
-
-    function updateDashboard() {
-      const users = getUsers();
-      const user = users[currentUser];
-      if (!user) return logout();
-
-      document.getElementById('dispUser').textContent = currentUser;
-      document.getElementById('balance').textContent = user.balance.toFixed(2);
-
-      document.getElementById('auth').style.display = 'none';
-      document.getElementById('register').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      document.getElementById('result').textContent = '';
-      document.getElementById('betAmount').value = '';
-    }
-
-    function placeBet() {
-      const betInput = document.getElementById('betAmount');
-      let amount = parseFloat(betInput.value);
-      if (isNaN(amount) || amount <= 0) return alert('Enter a valid bet amount');
-
-      const users = getUsers();
-      const user = users[currentUser];
-
-      if (user.balance < amount) return alert('Insufficient balance');
-
-      user.balance -= amount;
-
-      const crashPoint = Math.random() * 4 + 1;
-      const cashOut = Math.random() * (crashPoint - 1) + 1;
-      const winnings = amount * cashOut;
-
-      user.balance += winnings;
-
-      saveUsers(users);
-      updateDashboard();
-
-      const resultText = `Crashed at x${crashPoint.toFixed(2)}. You cashed out at x${cashOut.toFixed(2)}. Winnings: ${winnings.toFixed(2)}`;
-      document.getElementById('result').textContent = resultText;
-
-      betInput.value = '';
-    }
-
-    function logout() {
-      currentUser = null;
-      document.getElementById('dashboard').style.display = 'none';
-      document.getElementById('auth').style.display = 'block';
-      document.getElementById('result').textContent = '';
-      document.getElementById('balance').textContent = '';
-      document.getElementById('username').value = '';
-      document.getElementById('password').value = '';
-    }
-  </script>
-</body>
-    </html>
   </html>
   
-  
-
-
-
-
