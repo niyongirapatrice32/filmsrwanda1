@@ -1,96 +1,508 @@
+# This is a Jupyter notebook cell containing the complete website code
+# You can export this as HTML or download the components
+
+# First, let's create the directory structure
+import os
+
+# Create directory structure
+dirs = [
+    'nd_goods_store',
+    'nd_goods_store/static',
+    'nd_goods_store/static/css',
+    'nd_goods_store/static/js',
+    'nd_goods_store/static/images',
+    'nd_goods_store/templates'
+]
+
+for dir in dirs:
+    os.makedirs(dir, exist_ok=True)
+
+# Create main app file (app.py)
+app_py = """
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key_here'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///nd_goods.db'
+db = SQLAlchemy(app)
+
+# Database Models
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    image = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, default=1)
+
+# Routes
+@app.route('/')
+def home():
+    products = Product.query.limit(4).all()
+    return render_template('index.html', products=products)
+
+@app.route('/products')
+def products():
+    category = request.args.get('category')
+    if category:
+        products = Product.query.filter_by(category=category).all()
+    else:
+        products = Product.query.all()
+    return render_template('products.html', products=products)
+
+@app.route('/product/<int:id>')
+def product_detail(id):
+    product = Product.query.get_or_404(id)
+    return render_template('product_detail.html', product=product)
+
+@app.route('/add_to_cart/<int:product_id>')
+def add_to_cart(product_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    cart_item = Cart.query.filter_by(
+        user_id=session['user_id'],
+        product_id=product_id
+    ).first()
+    
+    if cart_item:
+        cart_item.quantity += 1
+    else:
+        cart_item = Cart(
+            user_id=session['user_id'],
+            product_id=product_id
+        )
+        db.session.add(cart_item)
+    
+    db.session.commit()
+    return redirect(url_for('view_cart'))
+
+@app.route('/cart')
+def view_cart():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    cart_items = Cart.query.filter_by(user_id=session['user_id']).all()
+    products = []
+    total = 0
+    
+    for item in cart_items:
+        product = Product.query.get(item.product_id)
+        products.append({
+            'product': product,
+            'quantity': item.quantity,
+            'subtotal': product.price * item.quantity
+        })
+        total += product.price * item.quantity
+    
+    return render_template('cart.html', products=products, total=total)
+
+@app.route('/checkout')
+def checkout():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    # Process payment here (integration with Stripe/PayPal would go here)
+    # Clear cart after successful payment
+    Cart.query.filter_by(user_id=session['user_id']).delete()
+    db.session.commit()
+    
+    return render_template('checkout_success.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        user = User.query.filter_by(email=email).first()
+        
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            return redirect(url_for('home'))
+        
+        return "Invalid credentials", 401
+    
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = generate_password_hash(request.form['password'])
+        
+        new_user = User(
+            username=username,
+            email=email,
+            password=password
+        )
+        
+        db.session.add(new_user)
+        db.session.commit()
+        
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('home'))
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
+"""
+
+with open('nd_goods_store/app.py', 'w') as f:
+    f.write(app_py)
+
+# Create base template (templates/base.html)
+base_html = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF‑8" />
-  <meta name="viewport" content="width=device‑width, initial‑scale=1.0" />
-  <title>PATRICE FILMS AGASOBANUYE KAGEZWEHO</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body { font-family:'Poppins',sans-serif; background:#111; color:#eee; }
-    header { text-align:center; padding:3rem; background:linear-gradient(90deg,#f90,#f50); animation:fadeDown 1s; }
-    @keyframes fadeDown { from{transform:translateY(-30px);opacity:0;} to{transform:translateY(0);opacity:1;} }
-    nav { display:flex; justify-content:center; background:#222; padding:1rem 0; }
-    nav a { color:#ccc; margin:0 1rem; text-decoration:none; transition:color .3s; }
-    nav a:hover { color:#f90; }
-    .search-bar { text-align:center; margin:2rem auto; }
-    .search-bar input { padding:.8rem; width:80%; max-width:600px; border-radius:5px; border:none; }
-    .films { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:2rem; padding:2rem; animation:fadeIn 1s; }
-    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-    .card { background:#222; border-radius:8px; overflow:hidden; transition:transform .3s,box-shadow .3s; }
-    .card:hover { transform:translateY(-5px); box-shadow:0 4px 15px rgba(0,0,0,0.5); }
-    .card iframe { width:100%; height:200px; }
-    .card .content { padding:1rem; }
-    .card h3 { font-size:1.2rem; color:#f90; margin-bottom:.5rem; }
-    .card a.button { display:inline-block; background:#f90; color:#111; padding:.6rem 1rem; text-decoration:none; border-radius:5px; margin-top:.5rem; }
-    .card a.button:hover { background:#ffb343; }
-    footer { text-align:center; padding:2rem; background:#000; color:#666; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ND Goods - Premium Nootropics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>PATRICE FILMS AGASOBANUYE KAGEZWEHO</h1>
-    <p>Stream 20 Agasobanuye Films by Patrice Films Hub</p>
-  </header>
-  <nav>
-    <a href="#search">Home</a><a href="#about">About</a><a href="#contact">Contact</a>
-  </nav>
-  <section id="search" class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search for a film..." onkeyup="filterFilms()" />
-  </section>
-  <section class="films" id="filmGrid"></section>
-  <footer>&copy; 2025 Patrice Films Agasobanuye kAgezWeHo</footer>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">ND Goods</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Products
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('products') }}?category=stimulants">Stimulants</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('products') }}?category=memory">Memory Enhancers</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('products') }}?category=anxiety">Anxiety Reducers</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('products') }}">All Products</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    {% if 'user_id' in session %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('view_cart') }}">
+                                Cart <span class="badge bg-primary">{% if cart_count %} {{ cart_count }} {% endif %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<script>
-  const films = [
-    {title:'Agasobanuye Gashya By Rocky New Film 2025', yt:'https://youtu.be/3oDpqmVSlng'},
-    {title:'Agasobanuye Agahinde Gashya Rocky Kimomo', yt:'https://youtu.be/NcZq5RifXD4'},
-    {title:'Agasobanuye By Rocky 2024: Secret Circle E01', yt:'https://youtu.be/Ljely1R8EFY'},
-    {title:'Agasobanuye The Human EP1', yt:'https://youtu.be/FPgWxuLPdvM'},
-    {title:'Agasobanuye I Kofi S1 Full Movie', yt:'https://youtu.be/E_WfsGCcZws'},
-    {title:'Agasobanuye Kahinde Rocky Umurinzi', yt:'https://youtu.be/uTjNFZOvrTc'},
-    {title:'Agasobanuye Ka Yanga Igihinde', yt:'https://youtu.be/HBtk9CAkfNw'},
-    {title:'Agasobanuye Gakubita Foo Igihinde The Great', yt:'https://youtu.be/m8kHtMEwVN8'},
-    {title:'Agasobanuye Avangers Greem Rocky', yt:'https://youtu.be/AVENGERS_VIDEO_ID'},
-    {title:'Agasobanuye Mr Bone by Rocky', yt:'https://youtu.be/BONE_VIDEO_ID'},
-    {title:'Agasobanuye Limitless Rocky', yt:'https://youtu.be/LIMITLESS_VIDEO_ID'},
-    {title:'Agasobanuye Jay Jan Ali', yt:'https://youtu.be/JAYJAN_VIDEO_ID'},
-    {title:'Agasobanuye Racha 2', yt:'https://youtu.be/RACHA2_VIDEO_ID'},
-    {title:'Agasobanuye Jai Ho 2', yt:'https://youtu.be/JAIHO2_VIDEO_ID'},
-    {title:'Agasobanuye Pokiri 1', yt:'https://youtu.be/POKIRI1_VIDEO_ID'},
-    {title:'Agasobanuye Kirrish 4', yt:'https://youtu.be/KIRRISH4_VIDEO_ID'},
-    {title:'Agasobanuye Plane Movie Rocky', yt:'https://youtu.be/PLANE_VIDEO_ID'},
-    {title:'Agasobanuye Heart of Stone', yt:'https://youtu.be/HEARTSTONE_ID'},
-    {title:'Agasobanuye Den of Achieve 2', yt:'https://youtu.be/DENACHIEVE2_ID'},
-    {title:'Agasobanuye Extraction 3', yt:'https://youtu.be/EXTRACTION3_ID'}
-  ];
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-  function loadFilms(){
-    const grid = document.getElementById('filmGrid');
-    grid.innerHTML = '';
-    films.forEach(f => {
-      const embed = f.yt.includes('youtu.be/') ? f.yt.replace('youtu.be/','www.youtube.com/embed/') : f.yt;
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <iframe src="${embed}" frameborder="0" allowfullscreen></iframe>
-        <div class="content">
-          <h3>${f.title}</h3>
-          <a class="button" href="${f.yt}" target="_blank">Watch on YouTube</a>
-        </div>`;
-      grid.appendChild(card);
-    });
-  }
+        {% block content %}{% endblock %}
+    </div>
 
-  function filterFilms(){
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('.card').forEach(c => {
-      const t = c.querySelector('h3').textContent.toLowerCase();
-      c.style.display = t.includes(q) ? '' : 'none';
-    });
-  }
+    <footer class="bg-dark text-white mt-5">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>ND Goods</h5>
+                    <p>Premium nootropic supplements for cognitive enhancement.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('home') }}" class="text-white">Home</a></li>
+                        <li><a href="{{ url_for('products') }}" class="text-white">Products</a></li>
+                        <li><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <address>
+                        Email: info@ndgoods.com<br>
+                        Phone: (123) 456-7890
+                    </address>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-  window.onload = loadFilms;
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
+"""
+
+with open('nd_goods_store/templates/base.html', 'w') as f:
+    f.write(base_html)
+
+# Create index template (templates/index.html)
+index_html = """
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="hero-section bg-light p-5 rounded mb-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4">Enhance Your Cognitive Performance</h1>
+                <p class="lead">Premium nootropic supplements designed to boost memory, focus, and mental clarity.</p>
+                <a href="{{ url_for('products') }}" class="btn btn-primary btn-lg">Shop Now</a>
+            </div>
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="Nootropic supplements" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mb-4">Featured Products</h2>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ url_for('static', filename='images/' + product.image) }}" class="card-img-top" alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description[:100] }}...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-primary fw-bold">${{ "%.2f"|format(product.price) }}</span>
+                            <a href="{{ url_for('product_detail', id=product.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card bg-light border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-shield-check fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title">Quality Guaranteed</h5>
+                    <p class="card-text">All our products are lab-tested for purity and potency.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-light border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-truck fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title">Fast Shipping</h5>
+                    <p class="card-text">Discreet packaging and fast delivery to your doorstep.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-light border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-headset fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title">Expert Support</h5>
+                    <p class="card-text">Our team is available to answer your questions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+"""
+
+with open('nd_goods_store/templates/index.html', 'w') as f:
+    f.write(index_html)
+
+# Create products template (templates/products.html)
+products_html = """
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Our Products</h2>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                {% if request.args.get('category') %}
+                    {{ request.args.get('category')|title }}
+                {% else %}
+                    All Categories
+                {% endif %}
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ url_for('products') }}">All Categories</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('products') }}?category=stimulants">Stimulants</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('products') }}?category=memory">Memory Enhancers</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('products') }}?category=anxiety">Anxiety Reducers</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ url_for('static', filename='images/' + product.image) }}" class="card-img-top" alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description[:100] }}...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-primary fw-bold">${{ "%.2f"|format(product.price) }}</span>
+                            <div>
+                                <a href="{{ url_for('product_detail', id=product.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-sm btn-primary">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+"""
+
+with open('nd_goods_store/templates/products.html', 'w') as f:
+    f.write(products_html)
+
+# Create product detail template (templates/product_detail.html)
+product_detail_html = """
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ url_for('static', filename='images/' + product.image) }}" class="img-fluid rounded" alt="{{ product.name }}">
+        </div>
+        <div class="col-md-6">
+            <h2>{{ product.name }}</h2>
+            <p class="text-muted">{{ product.category|title }}</p>
+            <h3 class="text-primary my-4">${{ "%.2f"|format(product.price) }}</h3>
+            
+            <div class="mb-4">
+                <h5>Description</h5>
+                <p>{{ product.description }}</p>
+            </div>
+            
+            <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="get">
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" style="width: 80px;">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
+            </form>
+            
+            <div class="mt-4 pt-4 border-top">
+                <h5>Product Details</h5>
+                <ul>
+                    <li>Lab-tested for purity</li>
+                    <li>Standardized extracts</li>
+                    <li>Vegan and gluten-free</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+"""
+
+with open('nd_goods_store/templates/product_detail.html', 'w') as f:
+    f.write(product_detail_html)
+
+# Create cart template (templates/cart.html)
+cart_html = """
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="mb-4">Your Shopping Cart</h2>
+    
+    {% if not products %}
+        <div class="alert alert-info">
+            Your cart is empty. <a href="{{ url_for('products') }}" class="alert-link">Browse products</a>.
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in products %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ url_for('static', filename='images/' + item.product.image) }}" 
+                                         alt="{{ item.product.name }}" 
+                                         style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+                                    {{ item.product.name }}
+                                </div>
+                            </td>
+                            <td>${{ "%.2f"|format(item.product.price) }}</td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary">-</a>
+                                    <span class="px-3">{{ item.quantity }}</span>
+                                    <a href="#" class="btn btn-sm btn-outline-secondary">+</a>
+                                </div>
+                            </td>
+                            <td>${{ "%.2f"|format(item.subtotal) }}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-outline-danger">Remove</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold">Total:</td>
+                        <td colspan="2" class="fw-bold">${{ "%.2f"|format(total) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ url_for('products') }}" class="btn btn-outline-secondary">Continue Shopping</a>
+            <a href="{{ url_for('checkout') }}" class="btn btn-primary">Proceed to Checkout</a>
+     
