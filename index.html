@@ -1,102 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Buy premium Rwandan tea and explore Rwanda's top tourist attractions, including Nyungwe National Park and gorilla trekking.">
-    <meta name="keywords" content="Rwandan tea, tea estates, Rwanda tourism, Nyungwe National Park, gorilla trekking, Kigali">
-    <meta name="author" content="Your Tea & Tourism Company">
-    <title>Rwanda Tea & Tours - Premium Tea and Unforgettable Adventures</title>
-</head>
-<body>
-    <!-- Header Section -->
-    <header>
-        <h1>Rwanda Tea & Tours</h1>
-        <p>Discover Premium Rwandan Tea and Unforgettable Adventures</p>
-    </header>
+const express = require('express');
+const app = express();
 
-    <!-- Navigation Menu -->
-    <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#tea">Buy Tea</a></li>
-            <li><a href="#tourism">Explore Rwanda</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-        </ul>
-    </nav>
+app.post('/api/referral', async (req, res) => {
+  const { referrerId, referredUserId } = req.body;
+  // Verify referred user has deposited
+  const deposited = await checkDeposit(referredUserId);
+  if (deposited) {
+    await creditBalance(referrerId, 1.40);
+    res.json({ success: true, reward: 1.40 });
+  } else {
+    res.status(400).json({ error: 'No deposit made' });
+  }
+});
 
-    <!-- Home Section -->
-    <section id="home">
-        <h2>Welcome to Rwanda Tea & Tours</h2>
-        <p>Experience the rich flavors of Rwandan tea, grown in the lush hills of Gisovu and Gisakura estates. Pair your purchase with an unforgettable journey through Rwanda’s stunning landscapes, from Nyungwe National Park to gorilla trekking in Volcanoes National Park.</p>
-    </section>
+app.listen(3000, () => console.log('Server running'));app.postconst axios = require('axios');
 
-    <!-- Tea Section -->
-    <section id="tea">
-        <h2>Premium Rwandan Tea</h2>
-        <p>Our teas are sourced from Rwanda’s finest estates, known for their fertile volcanic soil and ideal climate. Enjoy award-winning teas from Gisovu Tea Estate, certified by the Rainforest Alliance, and the scenic Gisakura Tea Estate.</p>
-        <h3>Our Tea Products</h3>
-        <ul>
-            <li>
-                <h4>Gisovu Black Tea</h4>
-                <p>Rich, bold flavor from the highest tea estates in Africa. Price: $15 per 250g.</p>
-            </li>
-            <li>
-                <h4>Gisakura Green Tea</h4>
-                <p>Delicate and refreshing, grown near Nyungwe Forest. Price: $12 per 250g.</p>
-            </li>
-            <li>
-                <h4>Rwandan Tea Sampler</h4>
-                <p>A curated selection of black, green, and white teas. Price: $25 per 500g.</p>
-            </li>
-        </ul>
-        <p><a href="#contact">Contact us to place your order</a> or learn about bulk discounts.</p>
-    </section>
-
-    <!-- Tourism Section -->
-    <section id="tourism">
-        <h2>Explore Rwanda’s Wonders</h2>
-        <p>Rwanda, the Land of a Thousand Hills, offers breathtaking scenery and unique experiences. Book a tour with us to visit iconic destinations.</p>
-        <h3>Top Attractions</h3>
-        <ul>
-            <li>
-                <h4>Nyungwe National Park</h4>
-                <p>Explore the primeval rainforest, home to Colobus monkeys and the source of the Nile River. Join our guided tea estate tours at Gisovu and Gisakura, located near Nyungwe.</p>
-            </li>
-            <li>
-                <h4>Volcanoes National Park</h4>
-                <p>Embark on a once-in-a-lifetime gorilla trekking adventure to see Rwanda’s majestic mountain gorillas.</p>
-            </li>
-            <li>
-                <h4>Kigali City Tour</h4>
-                <p>Discover Rwanda’s vibrant capital, including the Kigali Genocide Memorial and local markets.</p>
-            </li>
-        </ul>
-        <p><a href="#contact">Book a tour</a> with our trusted partners, including Explore Rwanda Tours.</p>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <h2>Contact Us</h2>
-        <p>Ready to order premium tea or book a tour? Reach out to us!</p>
-        <form action="mailto:info@rwandateaandtours.com" method="post" enctype="text/plain">
-            <label for="name">Name:</label><br>
-            <input type="text" id="name" name="name" required><br>
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br>
-            <label for="message">Message:</label><br>
-            <textarea id="message" name="message" rows="5" cols="30" required></textarea><br>
-            <input type="submit" value="Send Message">
-        </form>
-        <p>Email: info@rwandateaandtours.com | Phone: +250 123 456 789</p>
-        <p>Visit us: Kigali, Rwanda</p>
-    </section>
-
-    <!-- Footer Section -->
-    <footer>
-        <p>&copy; 2025 Rwanda Tea & Tours. All rights reserved.</p>
-        <p>Follow us on social media: <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">Twitter</a></p>
-    </footer>
-</body>
-            </html>       
-
+async function createBinancePayOrder(userId, amount) {
+  const response = await axios.post('https://api.binance.com/pay/v1/order', {
+    merchantId: 'YOUR_MERCHANT_ID',
+    amount: amount,
+    currency: 'USDT',
+    userId: userId,
+  }, {
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY'
+    }
+  });
+  return response.data.qrCode;
+}https://api.binance.com/pay/v1/order
