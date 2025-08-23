@@ -1,1179 +1,679 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TubePromote - Boost Your YouTube Channel</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
-        }
-        header {
-            background: linear-gradient(to right, #FF0000, #FF5E5E);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-        .logo span {
-            color: #fff;
-            margin-right: 10px;
-        }
-        .user-actions {
-            display: flex;
-            gap: 15px;
-        }
-        .auth-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .tab {
-            padding: 15px 25px;
-            cursor: pointer;
-            flex: 1;
-            text-align: center;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        .tab.active {
-            background: #FF0000;
-            color: white;
-        }
-        .tab-content {
-            display: none;
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        h2 {
-            color: #FF0000;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        button {
-            background: #FF0000;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #CC0000;
-        }
-        .btn-secondary {
-            background: #4CAF50;
-        }
-        .btn-secondary:hover {
-            background: #45a049;
-        }
-        .video-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            background: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
-        .video-card h3 {
-            color: #FF0000;
-            margin-bottom: 10px;
-        }
-        .video-thumbnail {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-        .video-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            color: #777;
-            font-size: 14px;
-        }
-        .payment-info {
-            background: #f8f8f8;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #FF0000;
-        }
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
-            text-align: center;
-        }
-        .stat-box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            margin: 0 10px;
-        }
-        .stat-number {
-            font-size: 2.5rem;
-            color: #FF0000;
-            font-weight: bold;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            background: #333;
-            color: white;
-        }
-        .video-player {
-            width: 100%;
-            height: 400px;
-            background: #000;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-        }
-        .timer {
-            font-size: 24px;
-            text-align: center;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        .earnings {
-            text-align: center;
-            font-size: 18px;
-            margin: 20px 0;
-        }
-        .admin-panel {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        .admin-table th, .admin-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        .admin-table th {
-            background-color: #FF0000;
-            color: white;
-        }
-        .admin-table tr:hover {
-            background-color: #f9f9f9;
-        }
-        .action-btn {
-            padding: 6px 12px;
-            margin-right: 5px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .approve-btn {
-            background: #4CAF50;
-            color: white;
-        }
-        .reject-btn {
-            background: #f44336;
-            color: white;
-        }
-        .withdraw-btn {
-            background: #2196F3;
-            color: white;
-            margin-top: 10px;
-        }
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            width: 400px;
-            max-width: 90%;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .close {
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .thumbnail-preview {
-            width: 100%;
-            max-height: 200px;
-            object-fit: contain;
-            margin-top: 10px;
-            border-radius: 4px;
-            display: none;
-        }
-        .withdrawal-section {
-            background: #f8f8f8;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        .video-item {
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .video-item:hover {
-            transform: translateY(-5px);
-        }
-        .admin-upload {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-        }
-        @media (max-width: 768px) {
-            .stats {
-                flex-direction: column;
-            }
-            .stat-box {
-                margin: 10px 0;
-            }
-            .tabs {
-                flex-direction: column;
-            }
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .user-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-            .auth-buttons {
-                width: 100%;
-                justify-content: center;
-            }
-            .video-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TubePromote - Boost Your YouTube Channel</title>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
+    body{background:#f9f9f9;color:#333;line-height:1.6}
+    header{background:linear-gradient(to right,#FF0000,#FF5E5E);color:#fff;padding:1rem;
+      display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+    .logo{font-size:1.5rem;font-weight:700;display:flex;gap:10px;align-items:center}
+    .user-actions{display:flex;gap:15px;align-items:center}
+    .auth-buttons{display:flex;gap:10px}
+    .container{max-width:1200px;margin:0 auto;padding:20px}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    .tab{background:#fff;padding:12px 18px;border-radius:8px;cursor:pointer;font-weight:600;
+      box-shadow:0 2px 10px rgba(0,0,0,.08);border:2px solid transparent}
+    .tab.active{background:#FF0000;color:#fff;border-color:#FF0000}
+    .tab-content{display:none;background:#fff;padding:22px;border-radius:10px;
+      box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:22px}
+    .tab-content.active{display:block}
+    h2{color:#FF0000;margin-bottom:14px}
+    .form-group{margin:14px 0}
+    label{display:block;margin-bottom:6px;font-weight:600}
+    input,textarea,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:15px}
+    button{background:#FF0000;color:#fff;border:none;padding:12px 18px;border-radius:8px;cursor:pointer;
+      font-size:15px;font-weight:700}
+    button:hover{background:#CC0000}
+    .btn-secondary{background:#4CAF50}
+    .btn-secondary:hover{background:#3f9444}
+    .payment-info{background:#f8f8f8;padding:14px;border-radius:10px;margin:12px 0;border-left:4px solid #FF0000}
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0;text-align:center}
+    .stat-box{background:#fff;padding:18px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+    .stat-number{font-size:2rem;color:#FF0000;font-weight:800}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .video-card{background:#fff;border:1px solid #eee;border-radius:12px;overflow:hidden;
+      box-shadow:0 1px 6px rgba(0,0,0,.06)}
+    .thumb{width:100%;height:180px;object-fit:cover;background:#000}
+    .v-body{padding:12px}
+    .v-title{font-size:16px;font-weight:700;color:#222;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .v-desc{font-size:13px;color:#666;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .v-meta{display:flex;justify-content:space-between;margin-top:10px;color:#777;font-size:13px}
+    .v-actions{display:flex;gap:8px;margin-top:10px}
+    .tag{font-size:12px;background:#ffecec;color:#ff1d1d;padding:2px 8px;border-radius:999px}
+    .video-player{width:100%;height:350px;background:#000;border-radius:10px;margin:10px 0;overflow:hidden}
+    .timer{font-size:22px;text-align:center;margin:14px 0;font-weight:800}
+    .earnings{text-align:center;font-size:16px;margin:10px 0}
+    .admin-table{width:100%;border-collapse:collapse;margin:10px 0}
+    .admin-table th,.admin-table td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+    .admin-table th{background:#FF0000;color:#fff}
+    .action-btn{padding:6px 10px;border:none;border-radius:6px;cursor:pointer}
+    .approve-btn{background:#4CAF50;color:#fff}
+    .reject-btn{background:#f44336;color:#fff}
+    footer{text-align:center;padding:24px;margin-top:32px;background:#333;color:#fff;border-top:3px solid #ff3b3b}
+    .user-info{display:flex;align-items:center;gap:10px;color:#fff}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;justify-content:center;align-items:center}
+    .modal-content{background:#fff;padding:22px;border-radius:12px;width:420px;max-width:92%}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .close{font-size:24px;cursor:pointer}
+    @media(max-width:900px){
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:600px){
+      header{flex-direction:column;gap:10px}
+      .grid,.stats{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <span>TubePromote</span>
-        </div>
-        <div class="user-actions">
-            <div class="user-info" id="user-info">
-                <!-- User info will be inserted here -->
-            </div>
-            <div class="auth-buttons" id="auth-buttons">
-                <button onclick="showLogin()">Login</button>
-                <button onclick="showRegister()" class="btn-secondary">Register</button>
-            </div>
-        </div>
-    </header>
+<header>
+  <div class="logo"><i class="fa-brands fa-youtube"></i><span>TubePromote</span></div>
+  <div class="user-actions">
+    <div class="user-info" id="user-info"></div>
+    <div class="auth-buttons" id="auth-buttons">
+      <button onclick="showLogin()">Login</button>
+      <button onclick="showRegister()" class="btn-secondary">Register</button>
+    </div>
+  </div>
+</header>
 
-    <div class="container">
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-number" id="total-videos">1,245</div>
-                <div class="stat-label">Videos Promoted</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="total-views">56,892</div>
-                <div class="stat-label">Total Views</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="total-earnings">1.2M RWF</div>
-                <div class="stat-label">Earned by Viewers</div>
-            </div>
-        </div>
+<div class="container">
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-number" id="stat-videos">1,245</div>
+      <div class="stat-label">Videos Promoted</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" id="stat-views">56,892</div>
+      <div class="stat-label">Total Views</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" id="stat-earned">1.2M RWF</div>
+      <div class="stat-label">Earned by Viewers</div>
+    </div>
+  </div>
 
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('upload')">Upload Video</div>
-            <div class="tab" onclick="switchTab('videos')">Available Videos</div>
-            <div class="tab" onclick="switchTab('view')">Watch & Earn</div>
-            <div class="tab" onclick="switchTab('dashboard')">Dashboard</div>
-            <div class="tab" onclick="switchTab('admin')" id="admin-tab" style="display: none;">Admin Panel</div>
-        </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('upload', this)">Upload Video</div>
+    <div class="tab" onclick="switchTab('videos', this)">Available Videos</div>
+    <div class="tab" onclick="switchTab('view', this)">Watch & Earn</div>
+    <div class="tab" onclick="switchTab('dashboard', this)">Dashboard</div>
+    <div class="tab" onclick="switchTab('admin', this)" id="admin-tab" style="display:none;">Admin Panel</div>
+  </div>
 
-        <div id="upload" class="tab-content active">
-            <h2>Upload Your Video for Promotion</h2>
-            <div class="payment-info">
-                <p><strong>Promotion Fee:</strong> 1000 RWF per video</p>
-                <p><strong>Platform Commission:</strong> 60% (600 RWF)</p>
-                <p><strong>Mobile Money Payment:</strong> 0783206442</p>
-                <p>Your video will be published after payment approval.</p>
-            </div>
-            <div class="form-group">
-                <label for="video-title">Video Title</label>
-                <input type="text" id="video-title" placeholder="Enter your video title">
-            </div>
-            <div class="form-group">
-                <label for="video-url">YouTube Video URL</label>
-                <input type="text" id="video-url" placeholder="https://youtube.com/your-video" onchange="generateThumbnail()">
-                <img id="thumbnail-preview" class="thumbnail-preview" alt="Thumbnail preview">
-            </div>
-            <div class="form-group">
-                <label for="video-desc">Video Description</label>
-                <textarea id="video-desc" rows="4" placeholder="Describe your video"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="payment-proof">Payment Proof (Transaction ID)</label>
-                <input type="text" id="payment-proof" placeholder="Enter your mobile money transaction ID">
-            </div>
-            <button onclick="processPayment()">Submit for Approval</button>
-        </div>
-
-        <div id="videos" class="tab-content">
-            <h2>Videos Available for Promotion</h2>
-            <div class="video-grid" id="video-grid">
-                <!-- Videos will be dynamically inserted here -->
-            </div>
-        </div>
-
-        <div id="view" class="tab-content">
-            <h2>Watch Videos and Earn Money</h2>
-            <div class="payment-info">
-                <p><strong>Earning Rate:</strong> 30 RWF for watching a video for at least 2 minutes</p>
-                <p><strong>Note:</strong> You can only watch each video once to earn rewards.</p>
-            </div>
-            <div class="video-player" id="video-player">
-                [Select a video to start watching]
-            </div>
-            <div class="timer" id="timer">02:00</div>
-            <div class="earnings">
-                <p>You will earn: <strong>30 RWF</strong> after watching for 2 minutes</p>
-            </div>
-            <button onclick="startWatching()" id="start-button" disabled>Start Watching</button>
-            <button onclick="claimEarnings()" disabled id="claim-button">Claim Your 30 RWF</button>
-        </div>
-
-        <div id="dashboard" class="tab-content">
-            <h2>Your Dashboard</h2>
-            <div class="stats">
-                <div class="stat-box">
-                    <div class="stat-number" id="user-videos">3</div>
-                    <div class="stat-label">Videos Uploaded</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number" id="user-views">1,245</div>
-                    <div class="stat-label">Total Views</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number" id="user-balance">420 RWF</div>
-                    <div class="stat-label">Total Earned</div>
-                </div>
-            </div>
-
-            <div class="withdrawal-section">
-                <h3>Withdraw Earnings</h3>
-                <p>Your current balance: <strong id="withdraw-balance">420 RWF</strong></p>
-                <div class="form-group">
-                    <label for="withdraw-method">Withdrawal Method</label>
-                    <select id="withdraw-method">
-                        <option value="mobile_money">Mobile Money</option>
-                        <option value="bank">Bank Transfer</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="withdraw-account">Account Number</label>
-                    <input type="text" id="withdraw-account" placeholder="Enter your account number">
-                </div>
-                <div class="form-group">
-                    <label for="withdraw-amount">Amount (RWF)</label>
-                    <input type="number" id="withdraw-amount" placeholder="Enter amount to withdraw">
-                </div>
-                <button onclick="requestWithdrawal()" class="withdraw-btn">Request Withdrawal</button>
-            </div>
-
-            <h3>Your Videos</h3>
-            <div id="user-videos-list">
-                <!-- User videos will be dynamically inserted here -->
-            </div>
-        </div>
-
-        <div id="admin" class="tab-content">
-            <h2>Admin Panel</h2>
-            
-            <div class="admin-panel">
-                <h3>Pending Video Approvals</h3>
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Uploader</th>
-                            <th>Transaction ID</th>
-                            <th>Thumbnail</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="approval-list">
-                        <!-- Pending approvals will be dynamically inserted here -->
-                    </tbody>
-                </table>
-
-                <h3>Withdrawal Requests</h3>
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th>Account</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="withdrawal-list">
-                        <!-- Withdrawal requests will be dynamically inserted here -->
-                    </tbody>
-                </table>
-
-                <div class="admin-upload">
-                    <h3>Add Professional Video</h3>
-                    <div class="form-group">
-                        <label for="admin-video-title">Video Title</label>
-                        <input type="text" id="admin-video-title" placeholder="Enter video title">
-                    </div>
-                    <div class="form-group">
-                        <label for="admin-video-url">YouTube Video URL</label>
-                        <input type="text" id="admin-video-url" placeholder="https://youtube.com/video" onchange="generateAdminThumbnail()">
-                        <img id="admin-thumbnail-preview" class="thumbnail-preview" alt="Thumbnail preview">
-                    </div>
-                    <div class="form-group">
-                        <label for="admin-video-desc">Video Description</label>
-                        <textarea id="admin-video-desc" rows="4" placeholder="Describe the video"></textarea>
-                    </div>
-                    <button onclick="addProfessionalVideo()">Add Professional Video</button>
-                </div>
-
-                <h3>Platform Statistics</h3>
-                <div class="stats">
-                    <div class="stat-box">
-                        <div class="stat-number" id="admin-total-users">2,150</div>
-                        <div class="stat-label">Total Users</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number" id="admin-total-videos">8,240</div>
-                        <div class="stat-label">Total Videos</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number" id="admin-total-revenue">2.5M RWF</div>
-                        <div class="stat-label">Total Revenue</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Upload -->
+  <div id="upload" class="tab-content active">
+    <h2>Upload Your Video for Promotion</h2>
+    <div class="payment-info">
+      <p><strong>Promotion Fee:</strong> 1000 RWF per video</p>
+      <p><strong>Platform Commission:</strong> 60% (600 RWF)</p>
+      <p><strong>Mobile Money Payment:</strong> 0783206442</p>
+      <p>Your video will be published after payment approval.</p>
+    </div>
+    <div class="form-group">
+      <label for="video-title">Video Title</label>
+      <input type="text" id="video-title" placeholder="Enter your video title" />
+    </div>
+    <div class="form-group">
+      <label for="video-url">YouTube Video URL</label>
+      <input type="text" id="video-url" placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX" oninput="previewThumbnail()"/>
+    </div>
+    <div class="form-group">
+      <label for="video-desc">Video Description</label>
+      <textarea id="video-desc" rows="4" placeholder="Describe your video"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="payment-proof">Payment Proof (Transaction ID)</label>
+      <input type="text" id="payment-proof" placeholder="Enter your mobile money transaction ID"/>
     </div>
 
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Login</h2>
-                <span class="close" onclick="closeModal('login-modal')">&times;</span>
-            </div>
-            <div class="form-group">
-                <label for="login-email">Email</label>
-                <input type="email" id="login-email" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label for="login-password">Password</label>
-                <input type="password" id="login-password" placeholder="Enter your password">
-            </div>
-            <button onclick="login()">Login</button>
-        </div>
+    <div id="thumb-preview" class="form-group" style="display:none;">
+      <label>Preview Thumbnail</label>
+      <img id="preview-img" class="thumb" alt="Thumbnail preview"/>
     </div>
 
-    <!-- Register Modal -->
-    <div id="register-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Register</h2>
-                <span class="close" onclick="closeModal('register-modal')">&times;</span>
-            </div>
-            <div class="form-group">
-                <label for="register-name">Full Name</label>
-                <input type="text" id="register-name" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-                <label for="register-email">Email</label>
-                <input type="email" id="register-email" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label for="register-password">Password</label>
-                <input type="password" id="register-password" placeholder="Create a password">
-            </div>
-            <div class="form-group">
-                <label for="register-role">I am a:</label>
-                <select id="register-role">
-                    <option value="viewer">Viewer</option>
-                    <option value="youtuber">YouTuber</option>
-                </select>
-            </div>
-            <button onclick="register()" class="btn-secondary">Register</button>
-        </div>
+    <button onclick="processPayment()">Submit for Approval</button>
+  </div>
+
+  <!-- Videos -->
+  <div id="videos" class="tab-content">
+    <h2>Videos Available for Promotion</h2>
+    <div id="videos-grid" class="grid"></div>
+  </div>
+
+  <!-- Watch & Earn -->
+  <div id="view" class="tab-content">
+    <h2>Watch Videos and Earn Money</h2>
+    <div class="payment-info">
+      <p><strong>Earning Rate:</strong> 30 RWF for watching a video for at least 2 minutes</p>
+      <p><strong>Note:</strong> You can only watch each video once to earn rewards.</p>
     </div>
 
-    <footer>
-        <p>TubePromote &copy; 2023. All rights reserved.</p>
-        <p>Help YouTubers grow their channel and help viewers earn money by watching videos</p>
-    </footer>
+    <div id="watch-video-area" class="video-player">
+      <div style="color:#fff;display:flex;height:100%;align-items:center;justify-content:center">
+        Select a video from “Available Videos” or press Start.
+      </div>
+    </div>
 
-    <script>
-        // Enhanced database with more functionality
-        const users = [
-            { id: 1, name: "Admin", email: "admin@tubepromote.com", password: "admin123", role: "admin", balance: 0 },
-            { id: 2, name: "John Doe", email: "john@example.com", password: "password", role: "youtuber", balance: 0 },
-            { id: 3, name: "Jane Smith", email: "jane@example.com", password: "password", role: "viewer", balance: 120 }
-        ];
+    <div class="timer" id="timer">02:00</div>
+    <div class="earnings">
+      <p>You will earn: <strong>30 RWF</strong> after watching for 2 minutes</p>
+    </div>
 
-        const videos = [
-            { id: 1, title: "How to Grow Your YouTube Channel", url: "https://www.youtube.com/watch?v=abcdefghijk", description: "Learn proven strategies", youtuberId: 2, approved: true, views: 1245, likes: 87, thumbnail: "https://img.youtube.com/vi/abcdefghijk/mqdefault.jpg" },
-            { id: 2, title: "Cooking Traditional Rwandan Dishes", url: "https://www.youtube.com/watch?v=mnopqrstuvw", description: "Join me as I prepare", youtuberId: 2, approved: true, views: 892, likes: 65, thumbnail: "https://img.youtube.com/vi/mnopqrstuvw/mqdefault.jpg" },
-            { id: 3, title: "Kigali City Tour 2023", url: "https://www.youtube.com/watch?v=xyz12345678", description: "Explore the city", youtuberId: 2, approved: true, views: 1567, likes: 102, thumbnail: "https://img.youtube.com/vi/xyz12345678/mqdefault.jpg" }
-        ];
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button onclick="startWatching()">Start Watching</button>
+      <button onclick="claimEarnings()" disabled id="claim-button">Claim Your 30 RWF</button>
+    </div>
+  </div>
 
-        const pendingVideos = [
-            { id: 4, title: "How to Code in JavaScript", url: "https://www.youtube.com/watch?v=js123456789", description: "Coding tutorial", youtuberId: 2, transactionId: "MM123456789", thumbnail: "https://img.youtube.com/vi/js123456789/mqdefault.jpg" },
-            { id: 5, title: "Rwanda Travel Guide", url: "https://www.youtube.com/watch?v=travel12345", description: "Travel vlog", youtuberId: 3, transactionId: "MM987654321", thumbnail: "https://img.youtube.com/vi/travel12345/mqdefault.jpg" }
-        ];
+  <!-- Dashboard -->
+  <div id="dashboard" class="tab-content">
+    <h2>Your Dashboard</h2>
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-number" id="dash-uploaded">0</div>
+        <div class="stat-label">Videos Uploaded</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="dash-views">0</div>
+        <div class="stat-label">Total Views</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="dash-earned">0 RWF</div>
+        <div class="stat-label">Total Earned</div>
+      </div>
+    </div>
 
-        const withdrawalRequests = [
-            { id: 1, userId: 3, amount: 100, method: "mobile_money", account: "0788123456", status: "pending" }
-        ];
+    <h3>Your Videos</h3>
+    <div id="my-videos" class="grid"></div>
 
-        let currentUser = null;
-        let selectedVideo = null;
-        let countdownInterval = null;
+    <h3 style="margin-top:18px;">Withdraw Funds</h3>
+    <div class="payment-info">
+      <p><strong>Minimum Withdrawal:</strong> 100 RWF</p>
+      <p><strong>Payment Method:</strong> Mobile Money (MTN MoMo)</p>
+    </div>
+    <div class="form-group">
+      <label for="withdraw-amount">Amount (RWF)</label>
+      <input type="number" id="withdraw-amount" min="100" placeholder="Enter amount"/>
+    </div>
+    <div class="form-group">
+      <label for="withdraw-number">Mobile Money Number</label>
+      <input type="text" id="withdraw-number" placeholder="07XXXXXXXX"/>
+    </div>
+    <button onclick="withdrawFunds()">Request Withdrawal</button>
+  </div>
 
-        // DOM functions
-        function switchTab(tabName) {
-            // Hide all tab contents
-            const tabContents = document.getElementsByClassName('tab-content');
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove('active');
-            }
-            
-            // Deactivate all tabs
-            const tabs = document.getElementsByClassName('tab');
-            for (let i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-            
-            // Activate selected tab and content
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
-            
-            // Load content based on tab
-            if (tabName === 'videos') {
-                loadVideos();
-            } else if (tabName === 'dashboard') {
-                loadDashboard();
-            } else if (tabName === 'admin') {
-                loadAdminPanel();
-            } else if (tabName === 'view') {
-                resetVideoPlayer();
-            }
-        }
+  <!-- Admin -->
+  <div id="admin" class="tab-content">
+    <h2>Admin Panel</h2>
 
-        function showLogin() {
-            document.getElementById('login-modal').style.display = 'flex';
-        }
+    <h3>Pending Video Approvals</h3>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th><th>Uploader</th><th>Transaction ID</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="approval-list"></tbody>
+    </table>
 
-        function showRegister() {
-            document.getElementById('register-modal').style.display = 'flex';
-        }
+    <h3>Platform Statistics</h3>
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-number" id="stat-users">2,150</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="stat-total-videos">8,240</div>
+        <div class="stat-label">Total Videos</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="stat-revenue">2.5M RWF</div>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+<!-- Login Modal -->
+<div id="login-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Login</h2>
+      <span class="close" onclick="closeModal('login-modal')">&times;</span>
+    </div>
+    <div class="form-group">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="Enter your email"/>
+    </div>
+    <div class="form-group">
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" placeholder="Enter your password"/>
+    </div>
+    <button onclick="login()">Login</button>
+  </div>
+</div>
 
-        function login() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                currentUser = user;
-                updateUI();
-                closeModal('login-modal');
-                alert('Login successful!');
-            } else {
-                alert('Invalid email or password');
-            }
-        }
+<!-- Register Modal -->
+<div id="register-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Register</h2>
+      <span class="close" onclick="closeModal('register-modal')">&times;</span>
+    </div>
+    <div class="form-group">
+      <label for="register-name">Full Name</label>
+      <input type="text" id="register-name" placeholder="Enter your full name"/>
+    </div>
+    <div class="form-group">
+      <label for="register-email">Email</label>
+      <input type="email" id="register-email" placeholder="Enter your email"/>
+    </div>
+    <div class="form-group">
+      <label for="register-password">Password</label>
+      <input type="password" id="register-password" placeholder="Create a password"/>
+    </div>
+    <div class="form-group">
+      <label for="register-role">I am a:</label>
+      <select id="register-role">
+        <option value="viewer">Viewer</option>
+        <option value="youtuber">YouTuber</option>
+      </select>
+    </div>
+    <button onclick="register()" class="btn-secondary">Register</button>
+  </div>
+</div>
 
-        function register() {
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const role = document.getElementById('register-role').value;
-            
-            // Check if user already exists
-            if (users.some(u => u.email === email)) {
-                alert('User with this email already exists');
-                return;
-            }
-            
-            // Create new user
-            const newUser = {
-                id: users.length + 1,
-                name,
-                email,
-                password,
-                role,
-                balance: 0
-            };
-            
-            users.push(newUser);
-            currentUser = newUser;
-            updateUI();
-            closeModal('register-modal');
-            alert('Registration successful! You are now logged in.');
-        }
+<footer>
+  <p>TubePromote &copy; 2025. All rights reserved.</p>
+  <p>Help YouTubers grow their channel and help viewers earn money by watching videos</p>
+</footer>
 
-        function logout() {
-            currentUser = null;
-            updateUI();
-            alert('You have been logged out');
-        }
+<script>
+/* =========================
+   Simulated Database
+   ========================= */
+const users = [
+  { id:1, name:"Admin", email:"admin@tubepromote.com", password:"admin123", role:"admin", balance:0, watched:{} },
+  { id:2, name:"John Doe", email:"john@example.com", password:"password", role:"youtuber", balance:0, watched:{} },
+  { id:3, name:"Jane Smith", email:"jane@example.com", password:"password", role:"viewer", balance:120, watched:{} }
+];
 
-        function updateUI() {
-            const authButtons = document.getElementById('auth-buttons');
-            const userInfo = document.getElementById('user-info');
-            const adminTab = document.getElementById('admin-tab');
-            
-            if (currentUser) {
-                authButtons.innerHTML = `<button onclick="logout()">Logout</button>`;
-                userInfo.innerHTML = `<i class="fas fa-user"></i> <span>${currentUser.name} (${currentUser.role}) | Balance: ${currentUser.balance} RWF</span>`;
-                
-                // Show admin tab if user is admin
-                if (currentUser.role === 'admin') {
-                    adminTab.style.display = 'flex';
-                } else {
-                    adminTab.style.display = 'none';
-                }
-            } else {
-                authButtons.innerHTML = `
-                    <button onclick="showLogin()">Login</button>
-                    <button onclick="showRegister()" class="btn-secondary">Register</button>
-                `;
-                userInfo.innerHTML = '';
-                adminTab.style.display = 'none';
-            }
-        }
+const videos = [
+  { id:1, title:"How to Grow Your YouTube Channel",
+    url:"https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    description:"Learn proven strategies",
+    youtuberId:2, approved:true, views:1245, likes:87, payouts:0 },
+  { id:2, title:"Cooking Traditional Rwandan Dishes",
+    url:"https://youtu.be/aqz-KE-bpKQ",
+    description:"Join me as I prepare", youtuberId:2,
+    approved:true, views:892, likes:65, payouts:0 },
+  { id:3, title:"Kigali City Tour 2023",
+    url:"https://www.youtube.com/watch?v=5NV6Rdv1a3I",
+    description:"Explore the city", youtuberId:2,
+    approved:true, views:1567, likes:102, payouts:0 }
+];
 
-        function generateThumbnail() {
-            const url = document.getElementById('video-url').value;
-            const thumbnailPreview = document.getElementById('thumbnail-preview');
-            
-            if (url) {
-                // Extract YouTube video ID
-                const videoId = extractYoutubeId(url);
-                if (videoId) {
-                    thumbnailPreview.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-                    thumbnailPreview.style.display = 'block';
-                }
-            }
-        }
+const pendingVideos = [
+  { id:4, title:"How to Code in JavaScript", url:"https://youtu.be/2vjPBrBU-TM",
+    description:"Coding tutorial", youtuberId:2, transactionId:"MM123456789" },
+  { id:5, title:"Rwanda Travel Guide", url:"https://www.youtube.com/watch?v=ktvTqknDobU",
+    description:"Travel vlog", youtuberId:3, transactionId:"MM987654321" }
+];
 
-        function generateAdminThumbnail() {
-            const url = document.getElementById('admin-video-url').value;
-            const thumbnailPreview = document.getElementById('admin-thumbnail-preview');
-            
-            if (url) {
-                // Extract YouTube video ID
-                const videoId = extractYoutubeId(url);
-                if (videoId) {
-                    thumbnailPreview.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-                    thumbnailPreview.style.display = 'block';
-                }
-            }
-        }
+const withdrawals = []; // {userId, amount, number, status}
 
-        function extractYoutubeId(url) {
-            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[7].length === 11) ? match[7] : false;
-        }
+/* =========================
+   Globals
+   ========================= */
+let currentUser = null;
+let currentWatchingId = null;
+let countdown = null;
+let timeLeft = 120;
 
-        function processPayment() {
-            if (!currentUser) {
-                alert('Please login first');
-                showLogin();
-                return;
-            }
-            
-            const title = document.getElementById('video-title').value;
-            const url = document.getElementById('video-url').value;
-            const description = document.getElementById('video-desc').value;
-            const transactionId = document.getElementById('payment-proof').value;
-            
-            if (!title || !url || !transactionId) {
-                alert('Please fill all fields before submitting.');
-                return;
-            }
-            
-            // Extract YouTube video ID for thumbnail
-            const videoId = extractYoutubeId(url);
-            const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : '';
-            
-            // Add to pending videos
-            pendingVideos.push({
-                id: videos.length + pendingVideos.length + 1,
-                title,
-                url,
-                description,
-                youtuberId: currentUser.id,
-                transactionId,
-                thumbnail
-            });
-            
-            alert('Video submitted successfully! It will be published after approval.');
-            
-            // Reset form
-            document.getElementById('video-title').value = '';
-            document.getElementById('video-url').value = '';
-            document.getElementById('video-desc').value = '';
-            document.getElementById('payment-proof').value = '';
-            document.getElementById('thumbnail-preview').style.display = 'none';
-        }
+/* =========================
+   Helpers - YouTube
+   ========================= */
+function getYouTubeId(url){
+  const regExp=/^.*(?:youtu\.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|watch\?.+&v=)([^#&?]{11}).*/;
+  const m=url.match(regExp);
+  return (m && m[1]) ? m[1] : null;
+}
+function getYouTubeThumbnail(url){
+  const id=getYouTubeId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+}
+function getYouTubeEmbed(url){
+  const id=getYouTubeId(url);
+  return id ? `https://www.youtube.com/embed/${id}` : null;
+}
 
-        function loadVideos() {
-            const videoGrid = document.getElementById('video-grid');
-            videoGrid.innerHTML = '';
-            
-            videos.filter(video => video.approved).forEach(video => {
-                const videoElement = document.createElement('div');
-                videoElement.className = 'video-item';
-                videoElement.innerHTML = `
-                    <div class="video-card" onclick="selectVideo(${video.id})">
-                        <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail">
-                        <h3>${video.title}</h3>
-                        <p>${video.description}</p>
-                        <div class="video-info">
-                            <span>Views: ${video.views}</span>
-                            <span>Likes: ${video.likes}</span>
-                        </div>
-                    </div>
-                `;
-                videoGrid.appendChild(videoElement);
-            });
-        }
+/* =========================
+   UI: Tabs & Modals
+   ========================= */
+function switchTab(tabName, el){
+  document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(tabName==='videos') renderVideosList();
+  if(tabName==='dashboard') renderDashboard();
+  if(tabName==='admin') renderApprovals();
+}
 
-        function selectVideo(videoId) {
-            selectedVideo = videos.find(v => v.id === videoId);
-            
-            if (selectedVideo) {
-                // Switch to Watch & Earn tab
-                switchTab('view');
-                
-                // Update video player
-                const videoPlayer = document.getElementById('video-player');
-                const videoId = extractYoutubeId(selectedVideo.url);
-                
-                if (videoId) {
-                    videoPlayer.innerHTML = `
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" 
-                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen></iframe>
-                    `;
-                }
-                
-                // Enable start button
-                document.getElementById('start-button').disabled = false;
-            }
-        }
+function showLogin(){ document.getElementById('login-modal').style.display='flex'; }
+function showRegister(){ document.getElementById('register-modal').style.display='flex'; }
+function closeModal(id){ document.getElementById(id).style.display='none'; }
 
-        function resetVideoPlayer() {
-            if (!selectedVideo) {
-                document.getElementById('video-player').innerHTML = '[Select a video to start watching]';
-                document.getElementById('start-button').disabled = true;
-                document.getElementById('claim-button').disabled = true;
-                document.getElementById('timer').textContent = '02:00';
-                
-                if (countdownInterval) {
-                    clearInterval(countdownInterval);
-                    countdownInterval = null;
-                }
-            }
-        }
+/* =========================
+   Auth
+   ========================= */
+function login(){
+  const email=document.getElementById('login-email').value.trim();
+  const password=document.getElementById('login-password').value.trim();
+  const user=users.find(u=>u.email===email && u.password===password);
+  if(user){
+    currentUser=user;
+    updateUI();
+    closeModal('login-modal');
+    alert('Login successful!');
+  }else{
+    alert('Invalid email or password');
+  }
+}
+function register(){
+  const name=document.getElementById('register-name').value.trim();
+  const email=document.getElementById('register-email').value.trim();
+  const password=document.getElementById('register-password').value.trim();
+  const role=document.getElementById('register-role').value;
+  if(!name||!email||!password){ alert('Please fill all fields'); return; }
+  if(users.some(u=>u.email===email)){ alert('User with this email already exists'); return; }
+  const newUser={ id:users.length+1, name, email, password, role, balance:0, watched:{} };
+  users.push(newUser);
+  currentUser=newUser;
+  updateUI();
+  closeModal('register-modal');
+  alert('Registration successful! You are now logged in.');
+}
+function logout(){
+  currentUser=null;
+  updateUI();
+  alert('You have been logged out');
+}
+function updateUI(){
+  const authButtons=document.getElementById('auth-buttons');
+  const userInfo=document.getElementById('user-info');
+  const adminTab=document.getElementById('admin-tab');
+  if(currentUser){
+    authButtons.innerHTML=`<button onclick="logout()">Logout</button>`;
+    userInfo.innerHTML=`<i class="fas fa-user"></i>
+      <span>${currentUser.name} (${currentUser.role}) | Balance: ${currentUser.balance} RWF</span>`;
+    adminTab.style.display=(currentUser.role==='admin')?'inline-flex':'none';
+  }else{
+    authButtons.innerHTML=`<button onclick="showLogin()">Login</button>
+      <button onclick="showRegister()" class="btn-secondary">Register</button>`;
+    userInfo.innerHTML='';
+    adminTab.style.display='none';
+  }
+  renderVideosList();
+  renderDashboard();
+}
 
-        function startWatching() {
-            if (!currentUser) {
-                alert('Please login first');
-                showLogin();
-                return;
-            }
-            
-            if (!selectedVideo) {
-                alert('Please select a video first');
-                return;
-            }
-            
-            alert('Video started! Please watch for at least 2 minutes to earn 30 RWF.');
-            
-            // Simulate timer countdown
-            let timeLeft = 120;
-            const timerElement = document.getElementById('timer');
-            const claimButton = document.getElementById('claim-button');
-            const startButton = document.getElementById('start-button');
-            
-            startButton.disabled = true;
-            
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
-            
-            countdownInterval = setInterval(function() {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(countdownInterval);
-                    countdownInterval = null;
-                    claimButton.disabled = false;
-                    alert('You have watched the video for 2 minutes! You can now claim your 30 RWF.');
-                }
-            }, 1000);
-        }
+/* =========================
+   Upload + Thumbnail Preview
+   ========================= */
+function previewThumbnail(){
+  const url=document.getElementById('video-url').value.trim();
+  const t=getYouTubeThumbnail(url);
+  const cont=document.getElementById('thumb-preview');
+  const img=document.getElementById('preview-img');
+  if(t){ img.src=t; cont.style.display='block'; }
+  else{ cont.style.display='none'; }
+}
+function processPayment(){
+  if(!currentUser){ alert('Please login first'); showLogin(); return; }
+  const title=document.getElementById('video-title').value.trim();
+  const url=document.getElementById('video-url').value.trim();
+  const description=document.getElementById('video-desc').value.trim();
+  const transactionId=document.getElementById('payment-proof').value.trim();
 
-        function claimEarnings() {
-            if (!currentUser) {
-                alert('Please login first');
-                return;
-            }
-            
-            if (!selectedVideo) {
-                alert('No video selected');
-                return;
-            }
-            
-            // Update user balance
-            currentUser.balance += 30;
-            selectedVideo.views += 1;
-            
-            updateUI();
-            alert('30 RWF has been added to your account balance!');
-            
-            document.getElementById('claim-button').disabled = true;
-            document.getElementById('timer').textContent = '02:00';
-            document.getElementById('start-button').disabled = false;
-            
-            // Reset for next video
-            selectedVideo = null;
-        }
+  if(!title||!url||!transactionId){ alert('Please fill all fields before submitting.'); return; }
+  if(!getYouTubeId(url)){ alert('Please enter a valid YouTube URL.'); return; }
 
-        function loadDashboard() {
-            if (!currentUser) return;
-            
-            // Update user stats
-            const userVideos = videos.filter(video => video.youtuberId === currentUser.id);
-            const totalViews = userVideos.reduce((sum, video) => sum + video.views, 0);
-            
-            document.getElementById('user-videos').textContent = userVideos.length;
-            document.getElementById('user-views').textContent = totalViews;
-            document.getElementById('user-balance').textContent = `${currentUser.balance} RWF`;
-            document.getElementById('withdraw-balance').textContent = `${currentUser.balance} RWF`;
-            
-            // Load user videos
-            const userVideosList = document.getElementById('user-videos-list');
-            userVideosList.innerHTML = '';
-            
-            userVideos.forEach(video => {
-                const status = video.approved ? 
-                    `<span style="color: green;">Approved</span>` : 
-                    `<span style="color: blue;">Pending Approval</span>`;
-                
-                const videoElement = document.createElement('div');
-                videoElement.className = 'video-card';
-                videoElement.innerHTML = `
-                    <h3>${video.title}</h3>
-                    <p>Status: ${status}</p>
-                    <div class="video-info">
-                        <span>Views: ${video.views}</span>
-                        <span>Earnings: ${Math.floor(video.views * 0.25)} RWF</span>
-                    </div>
-                `;
-                userVideosList.appendChild(videoElement);
-            });
-        }
+  const newId = Math.max(0, ...videos.map(v=>v.id), ...pendingVideos.map(v=>v.id))+1;
+  pendingVideos.push({ id:newId, title, url, description, youtuberId:currentUser.id, transactionId });
 
-        function requestWithdrawal() {
-            if (!currentUser) {
-                alert('Please login first');
-                return;
-            }
-            
-            const amount = parseInt(document.getElementById('withdraw-amount').value);
-            const method = document.getElementById('withdraw-method').value;
-            const account = document.getElementById('withdraw-account').value;
-            
-            if (!amount || !account) {
-                alert('Please fill all fields');
-                return;
-            }
-            
-            if (amount > currentUser.balance) {
-                alert('Insufficient balance');
-                return;
-            }
-            
-            if (amount < 100) {
-                alert('Minimum withdrawal amount is 100 RWF');
-                return;
-            }
-            
-            // Create withdrawal request
-            withdrawalRequests.push({
-                id: withdrawalRequests.length + 1,
-                userId: currentUser.id,
-                amount,
-                method,
-                account,
-                status: 'pending'
-            });
-            
-            alert('Withdrawal request submitted! It will be processed within 24 hours.');
-            
-            // Reset form
-            document.getElementById('withdraw-amount').value = '';
-            document.getElementById('withdraw-account').value = '';
-        }
+  alert('Video submitted successfully! It will be published after approval.');
 
-        function loadAdminPanel() {
-            if (!currentUser || currentUser.role !== 'admin') return;
-            
-            // Load pending approvals
-            const approvalList = document.getElementById('approval-list');
-            approvalList.innerHTML = '';
-            
-            pendingVideos.forEach(video => {
-                const uploader = users.find(u => u.id === video.youtuberId);
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${video.title}</td>
-                    <td>${uploader ? uploader.name : 'Unknown'}</td>
-                    <td>${video.transactionId}</td>
-                    <td><img src="${video.thumbnail}" alt="Thumbnail" style="width: 60px; height: 45px; object-fit: cover;"></td>
-                    <td>
-                        <button class="action-btn approve-btn" onclick="approveVideo(${video.id})">Approve</button>
-                        <button class="action-btn reject-btn" onclick="rejectVideo(${video.id})">Reject</button>
-                    </td>
-                `;
-                approvalList.appendChild(row);
-            });
-            
-            // Load withdrawal requests
-            const withdrawalList = document.getElementById('withdrawal-list');
-            withdrawalList.innerHTML = '';
-            
-            withdrawalRequests.forEach(request => {
-                const user = users.find(u => u.id === request.userId);
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user ? user.name : 'Unknown'}</td>
-                    <td>${request.amount} RWF</td>
-                    <td>${request.method.replace('_', ' ').toUpperCase()}</td>
-                    <td>${request.account}</td>
-                    <td>${request.status}</td>
-                    <td>
-                        ${request.status === 'pending' ? `
-                            <button class="action-btn approve-btn" onclick="approveWithdrawal(${request.id})">Approve</button>
-                            <button class="action-btn reject-btn" onclick="rejectWithdrawal(${request.id})">Reject</button>
-                        ` : 'Processed'}
-                    </td>
-                `;
-                withdrawalList.appendChild(row);
-            });
-        }
+  // reset form
+  document.getElementById('video-title').value='';
+  document.getElementById('video-url').value='';
+  document.getElementById('video-desc').value='';
+  document.getElementById('payment-proof').value='';
+  document.getElementById('thumb-preview').style.display='none';
 
-        function approveVideo(videoId) {
-            const videoIndex = pendingVideos.findIndex(v => v.id === videoId);
-            
-            if (videoIndex !== -1) {
-                const video = pendingVideos[videoIndex];
-                video.approved = true;
-                videos.push(video);
-                pendingVideos.splice(videoIndex, 1);
-                
-                alert('Video approved successfully!');
-                loadAdminPanel();
-            }
-        }
+  if(currentUser.role==='admin'){ renderApprovals(); }
+}
 
-        function rejectVideo(videoId) {
-            const videoIndex = pendingVideos.findIndex(v => v.id === videoId);
-            
-            if (videoIndex !== -1) {
-                pendingVideos.splice(videoIndex, 1);
-                alert('Video rejected successfully!');
-                loadAdminPanel();
-            }
-        }
+/* =========================
+   Available Videos (grid)
+   ========================= */
+function renderVideosList(){
+  const grid=document.getElementById('videos-grid');
+  if(!grid) return;
+  grid.innerHTML='';
+  const approved=videos.filter(v=>v.approved);
+  if(approved.length===0){
+    grid.innerHTML='<p>No approved videos yet.</p>';
+    return;
+  }
+  approved.forEach(v=>{
+    const thumb=getYouTubeThumbnail(v.url) || '';
+    const owned = currentUser && v.youtuberId===currentUser.id;
+    const watched = currentUser && currentUser.watched[v.id];
+    const div=document.createElement('div');
+    div.className='video-card';
+    div.innerHTML=`
+      <img class="thumb" src="${thumb}" alt="thumbnail"/>
+      <div class="v-body">
+        <div class="v-title">${v.title}</div>
+        <div class="v-desc">${v.description||''}</div>
+        <div class="v-meta">
+          <span>Views: ${v.views||0}</span>
+          <span>${watched?'<span class="tag">Watched</span>':''}</span>
+        </div>
+        <div class="v-actions">
+          <button onclick="playVideo(${v.id})"><i class="fa-solid fa-play"></i> Watch</button>
+          ${owned?'<span class="tag">My Upload</span>':''}
+        </div>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
 
-        function approveWithdrawal(requestId) {
-            const requestIndex = withdrawalRequests.findIndex(r => r.id === requestId);
-            
-            if (requestIndex !== -1) {
-                const request = withdrawalRequests[requestIndex];
-                const user = users.find(u => u.id === request.userId);
-                
-                if (user) {
-                    if (user.balance >= request.amount) {
-                        user.balance -= request.amount;
-                        request.status = 'approved';
-                        alert('Withdrawal approved successfully!');
-                        loadAdminPanel();
-                    } else {
-                        alert('User has insufficient balance');
-                    }
-                }
-            }
-        }
+/* =========================
+   Watch & Earn
+   ========================= */
+function playVideo(videoId){
+  const v=videos.find(x=>x.id===videoId && x.approved);
+  if(!v){ alert('Video not found'); return; }
+  const embed=getYouTubeEmbed(v.url);
+  currentWatchingId=v.id;
+  document.getElementById('watch-video-area').innerHTML=
+    `<iframe width="100%" height="100%" src="${embed}" frameborder="0" allowfullscreen
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+  resetTimer();
+}
+function resetTimer(){
+  stopCountdown();
+  timeLeft=120;
+  document.getElementById('timer').textContent='02:00';
+  document.getElementById('claim-button').disabled=true;
+}
+function stopCountdown(){
+  if(countdown){ clearInterval(countdown); countdown=null; }
+}
+function startWatching(){
+  if(!currentUser){ alert('Please login first'); showLogin(); return; }
+  // if no selected video, pick first un-watched approved
+  if(!currentWatchingId){
+    const list=videos.filter(v=>v.approved);
+    const next=list.find(v=>!(currentUser.watched[v.id]));
+    (next)? playVideo(next.id) : (list[0]? playVideo(list[0].id) : alert('No videos available.'));
+  }
+  if(!currentWatchingId) return;
 
-        function rejectWithdrawal(requestId) {
-            const requestIndex = withdrawalRequests.findIndex(r => r.id === requestId);
-            
-            if (requestIndex !== -1) {
-                withdrawalRequests[requestIndex].status = 'rejected';
-                alert('Withdrawal rejected successfully!');
-                loadAdminPanel();
-            }
-        }
+  if(currentUser.watched[currentWatchingId]){
+    alert('You already claimed earnings for this video.');
+    return;
+  }
 
-        function addProfessionalVideo() {
-            const title = document.getElementById('admin-video-title').value;
-            const url = document.getElementById('admin-video-url').value;
-            const description = document.getElementById('admin-video-desc').value;
-            
-            if (!title || !url) {
-                alert('Please fill all required fields');
-                return;
-            }
-            
-            // Extract YouTube video ID for thumbnail
-            const videoId = extractYoutubeId(url);
-            const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : '';
-            
-            // Add professional video (auto-approved)
-            videos.push({
-                id: videos.length + 1,
-                title,
-                url,
-                description,
-                youtuberId: 0, // System user
-                approved: true,
-                views: 0,
-                likes: 0,
-                thumbnail
-            });
-            
-            alert('Professional video added successfully!');
-            
-            // Reset form
-            document.getElementById('admin-video-title').value = '';
-            document.getElementById('admin-video-url').value = '';
-            document.getElementById('admin-video-desc').value = '';
-            document.getElementById('admin-thumbnail-preview').style.display = 'none';
-        }
+  alert('Video started! Please watch for at least 2 minutes to earn 30 RWF.');
+  stopCountdown();
+  countdown=setInterval(()=>{
+    timeLeft--;
+    const m=Math.floor(timeLeft/60);
+    const s=timeLeft%60;
+    document.getElementById('timer').textContent=
+      `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    if(timeLeft<=0){
+      stopCountdown();
+      document.getElementById('claim-button').disabled=false;
+      alert('You have watched for 2 minutes! Claim your 30 RWF now.');
+    }
+  },1000);
+}
 
-        // Initialize the UI
-        updateUI();
-        loadVideos();
-    </script>
+function claimEarnings(){
+  if(!currentUser){ alert('Please login first'); return; }
+  if(!currentWatchingId){ alert('Start a video first'); return; }
+  if(currentUser.watched[currentWatchingId]){
+    alert('Already claimed for this video. Choose another one.');
+    return;
+  }
+  currentUser.balance += 30;
+  currentUser.watched[currentWatchingId]=true;
+
+  // increment views for the video (simulated)
+  const v=videos.find(x=>x.id===currentWatchingId);
+  if(v){ v.views = (v.views||0)+1; }
+
+  updateUI();
+  renderVideosList();
+  alert('30 RWF added to your balance!');
+  document.getElementById('claim-button').disabled=true;
+  resetTimer();
+}
+
+/* =========================
+   Dashboard
+   ========================= */
+function renderDashboard(){
+  const myGrid=document.getElementById('my-videos');
+  if(!myGrid) return;
+  myGrid.innerHTML='';
+  const mine=currentUser ? videos.filter(v=>v.youtuberId===currentUser.id) : [];
+  document.getElementById('dash-uploaded').textContent=mine.length;
+  const totalViews = mine.reduce((a,b)=>a+(b.views||0),0);
+  document.getElementById('dash-views').textContent=totalViews;
+  document.getElementById('dash-earned').textContent = (currentUser? currentUser.balance:0)+' RWF';
+
+  if(mine.length===0){
+    myGrid.innerHTML='<p>No uploads yet.</p>';
+    return;
+  }
+  mine.forEach(v=>{
+    const thumb=getYouTubeThumbnail(v.url)||'';
+    const status=v.approved?'<span style="color:green">Approved</span>':'<span style="color:blue">Pending</span>';
+    const card=document.createElement('div');
+    card.className='video-card';
+    card.innerHTML=`
+      <img class="thumb" src="${thumb}" alt="thumb"/>
+      <div class="v-body">
+        <div class="v-title">${v.title}</div>
+        <p>Status: ${status}</p>
+        <div class="v-meta">
+          <span>Views: ${v.views||0}</span>
+          <span>Payouts: ${v.payouts||0} RWF</span>
+        </div>
+      </div>`;
+    myGrid.appendChild(card);
+  });
+}
+
+/* =========================
+   Withdrawals
+   ========================= */
+function withdrawFunds(){
+  if(!currentUser){ alert('Please login first'); return; }
+  const amount=parseInt(document.getElementById('withdraw-amount').value,10);
+  const number=document.getElementById('withdraw-number').value.trim();
+  if(isNaN(amount)||amount<100){ alert('Minimum withdrawal is 100 RWF.'); return; }
+  if(amount>currentUser.balance){ alert('Insufficient balance.'); return; }
+  if(!/^07\d{7,8}$/.test(number)){ alert('Enter a valid MTN MoMo number (starts with 07).'); return; }
+
+  currentUser.balance -= amount;
+  withdrawals.push({userId:currentUser.id, amount, number, status:'pending'});
+  updateUI();
+  alert(`Withdrawal request of ${amount} RWF sent to ${number}.`);
+  document.getElementById('withdraw-amount').value='';
+  document.getElementById('withdraw-number').value='';
+}
+
+/* =========================
+   Admin Panel
+   ========================= */
+function renderApprovals(){
+  const body=document.getElementById('approval-list');
+  if(!body) return;
+  body.innerHTML='';
+  if(pendingVideos.length===0){
+    body.innerHTML='<tr><td colspan="4">No pending videos.</td></tr>';
+    return;
+  }
+  pendingVideos.forEach(p=>{
+    const tr=document.createElement('tr');
+    const uploader=users.find(u=>u.id===p.youtuberId);
+    tr.innerHTML=`
+      <td>${p.title}</td>
+      <td>${uploader?uploader.name:'User '+p.youtuberId}</td>
+      <td>${p.transactionId}</td>
+      <td>
+        <button class="action-btn approve-btn" onclick="approveVideo(${p.id})">Approve</button>
+        <button class="action-btn reject-btn" onclick="rejectVideo(${p.id})">Reject</button>
+      </td>`;
+    body.appendChild(tr);
+  });
+}
+function approveVideo(pid){
+  const idx=pendingVideos.findIndex(x=>x.id===pid);
+  if(idx===-1) return;
+  const p=pendingVideos[idx];
+  videos.push({ id:p.id, title:p.title, url:p.url, description:p.description, youtuberId:p.youtuberId,
+    approved:true, views:0, likes:0, payouts:0 });
+  pendingVideos.splice(idx,1);
+  alert('Video approved and published!');
+  renderApprovals();
+  renderVideosList();
+  renderDashboard();
+}
+function rejectVideo(pid){
+  const idx=pendingVideos.findIndex(x=>x.id===pid);
+  if(idx===-1) return;
+  pendingVideos.splice(idx,1);
+  alert('Video rejected.');
+  renderApprovals();
+}
+
+/* =========================
+   Init
+   ========================= */
+updateUI(); // boot
+</script>
 </body>
 </html>
