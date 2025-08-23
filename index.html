@@ -12,13 +12,11 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
         body {
             background-color: #f9f9f9;
             color: #333;
             line-height: 1.6;
         }
-        
         header {
             background: linear-gradient(to right, #FF0000, #FF5E5E);
             color: white;
@@ -29,35 +27,29 @@
             justify-content: space-between;
             align-items: center;
         }
-        
         .logo {
             font-size: 2rem;
             font-weight: bold;
             display: flex;
             align-items: center;
         }
-        
         .logo span {
             color: #fff;
             margin-right: 10px;
         }
-        
         .user-actions {
             display: flex;
             gap: 15px;
         }
-        
         .auth-buttons {
             display: flex;
             gap: 10px;
         }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        
         .tabs {
             display: flex;
             margin-bottom: 20px;
@@ -66,7 +58,6 @@
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
         .tab {
             padding: 15px 25px;
             cursor: pointer;
@@ -75,12 +66,10 @@
             font-weight: bold;
             transition: background 0.3s;
         }
-        
         .tab.active {
             background: #FF0000;
             color: white;
         }
-        
         .tab-content {
             display: none;
             background: white;
@@ -89,28 +78,23 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
-        
         .tab-content.active {
             display: block;
         }
-        
         h2 {
             color: #FF0000;
             margin-bottom: 20px;
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 10px;
         }
-        
         .form-group {
             margin-bottom: 20px;
         }
-        
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
         }
-        
         input, textarea, select {
             width: 100%;
             padding: 12px;
@@ -118,7 +102,6 @@
             border-radius: 4px;
             font-size: 16px;
         }
-        
         button {
             background: #FF0000;
             color: white;
@@ -130,19 +113,15 @@
             font-weight: bold;
             transition: background 0.3s;
         }
-        
         button:hover {
             background: #CC0000;
         }
-        
         .btn-secondary {
             background: #4CAF50;
         }
-        
         .btn-secondary:hover {
             background: #45a049;
         }
-        
         .video-card {
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -150,13 +129,20 @@
             margin-bottom: 20px;
             background: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
-        
         .video-card h3 {
             color: #FF0000;
             margin-bottom: 10px;
         }
-        
+        .video-thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
         .video-info {
             display: flex;
             justify-content: space-between;
@@ -164,7 +150,6 @@
             color: #777;
             font-size: 14px;
         }
-        
         .payment-info {
             background: #f8f8f8;
             padding: 15px;
@@ -172,14 +157,12 @@
             margin: 20px 0;
             border-left: 4px solid #FF0000;
         }
-        
         .stats {
             display: flex;
             justify-content: space-around;
             margin: 30px 0;
             text-align: center;
         }
-        
         .stat-box {
             background: white;
             padding: 20px;
@@ -188,13 +171,11 @@
             flex: 1;
             margin: 0 10px;
         }
-        
         .stat-number {
             font-size: 2.5rem;
             color: #FF0000;
             font-weight: bold;
         }
-        
         footer {
             text-align: center;
             padding: 20px;
@@ -202,10 +183,9 @@
             background: #333;
             color: white;
         }
-        
         .video-player {
             width: 100%;
-            height: 300px;
+            height: 400px;
             background: #000;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -215,48 +195,40 @@
             color: white;
             font-size: 18px;
         }
-        
         .timer {
             font-size: 24px;
             text-align: center;
             margin: 20px 0;
             font-weight: bold;
         }
-        
         .earnings {
             text-align: center;
             font-size: 18px;
             margin: 20px 0;
         }
-        
         .admin-panel {
             background: #f5f5f5;
             padding: 20px;
             border-radius: 8px;
             margin-top: 20px;
         }
-        
         .admin-table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
         }
-        
         .admin-table th, .admin-table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        
         .admin-table th {
             background-color: #FF0000;
             color: white;
         }
-        
         .admin-table tr:hover {
             background-color: #f9f9f9;
         }
-        
         .action-btn {
             padding: 6px 12px;
             margin-right: 5px;
@@ -264,24 +236,25 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        
         .approve-btn {
             background: #4CAF50;
             color: white;
         }
-        
         .reject-btn {
             background: #f44336;
             color: white;
         }
-        
+        .withdraw-btn {
+            background: #2196F3;
+            color: white;
+            margin-top: 10px;
+        }
         .user-info {
             display: flex;
             align-items: center;
             gap: 10px;
             color: white;
         }
-        
         .modal {
             display: none;
             position: fixed;
@@ -294,7 +267,6 @@
             justify-content: center;
             align-items: center;
         }
-        
         .modal-content {
             background: white;
             padding: 30px;
@@ -302,45 +274,71 @@
             width: 400px;
             max-width: 90%;
         }
-        
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
         .close {
             font-size: 24px;
             cursor: pointer;
         }
-        
+        .thumbnail-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            margin-top: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .withdrawal-section {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .video-item {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .video-item:hover {
+            transform: translateY(-5px);
+        }
+        .admin-upload {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
         @media (max-width: 768px) {
             .stats {
                 flex-direction: column;
             }
-            
             .stat-box {
                 margin: 10px 0;
             }
-            
             .tabs {
                 flex-direction: column;
             }
-            
             header {
                 flex-direction: column;
                 gap: 15px;
             }
-            
             .user-actions {
                 flex-direction: column;
                 width: 100%;
             }
-            
             .auth-buttons {
                 width: 100%;
                 justify-content: center;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -364,15 +362,15 @@
     <div class="container">
         <div class="stats">
             <div class="stat-box">
-                <div class="stat-number">1,245</div>
+                <div class="stat-number" id="total-videos">1,245</div>
                 <div class="stat-label">Videos Promoted</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number">56,892</div>
+                <div class="stat-number" id="total-views">56,892</div>
                 <div class="stat-label">Total Views</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number">1.2M RWF</div>
+                <div class="stat-number" id="total-earnings">1.2M RWF</div>
                 <div class="stat-label">Earned by Viewers</div>
             </div>
         </div>
@@ -393,58 +391,30 @@
                 <p><strong>Mobile Money Payment:</strong> 0783206442</p>
                 <p>Your video will be published after payment approval.</p>
             </div>
-            
             <div class="form-group">
                 <label for="video-title">Video Title</label>
                 <input type="text" id="video-title" placeholder="Enter your video title">
             </div>
-            
             <div class="form-group">
                 <label for="video-url">YouTube Video URL</label>
-                <input type="text" id="video-url" placeholder="https://youtube.com/your-video">
+                <input type="text" id="video-url" placeholder="https://youtube.com/your-video" onchange="generateThumbnail()">
+                <img id="thumbnail-preview" class="thumbnail-preview" alt="Thumbnail preview">
             </div>
-            
             <div class="form-group">
                 <label for="video-desc">Video Description</label>
                 <textarea id="video-desc" rows="4" placeholder="Describe your video"></textarea>
             </div>
-            
             <div class="form-group">
                 <label for="payment-proof">Payment Proof (Transaction ID)</label>
                 <input type="text" id="payment-proof" placeholder="Enter your mobile money transaction ID">
             </div>
-            
             <button onclick="processPayment()">Submit for Approval</button>
         </div>
 
         <div id="videos" class="tab-content">
             <h2>Videos Available for Promotion</h2>
-            
-            <div class="video-card">
-                <h3>How to Grow Your YouTube Channel</h3>
-                <p>Learn proven strategies to increase your subscribers and views on YouTube.</p>
-                <div class="video-info">
-                    <span>Views: 1,245</span>
-                    <span>Likes: 87</span>
-                </div>
-            </div>
-            
-            <div class="video-card">
-                <h3>Cooking Traditional Rwandan Dishes</h3>
-                <p>Join me as I prepare delicious Rwandan meals step by step.</p>
-                <div class="video-info">
-                    <span>Views: 892</span>
-                    <span>Likes: 65</span>
-                </div>
-            </div>
-            
-            <div class="video-card">
-                <h3>Kigali City Tour 2023</h3>
-                <p>Explore the beautiful city of Kigali with me and discover hidden gems.</p>
-                <div class="video-info">
-                    <span>Views: 1,567</span>
-                    <span>Likes: 102</span>
-                </div>
+            <div class="video-grid" id="video-grid">
+                <!-- Videos will be dynamically inserted here -->
             </div>
         </div>
 
@@ -454,66 +424,58 @@
                 <p><strong>Earning Rate:</strong> 30 RWF for watching a video for at least 2 minutes</p>
                 <p><strong>Note:</strong> You can only watch each video once to earn rewards.</p>
             </div>
-            
-            <div class="video-player">
-                [Video Player Will Appear Here]
+            <div class="video-player" id="video-player">
+                [Select a video to start watching]
             </div>
-            
             <div class="timer" id="timer">02:00</div>
-            
             <div class="earnings">
                 <p>You will earn: <strong>30 RWF</strong> after watching for 2 minutes</p>
             </div>
-            
-            <button onclick="startWatching()">Start Watching</button>
+            <button onclick="startWatching()" id="start-button" disabled>Start Watching</button>
             <button onclick="claimEarnings()" disabled id="claim-button">Claim Your 30 RWF</button>
         </div>
 
         <div id="dashboard" class="tab-content">
             <h2>Your Dashboard</h2>
-            
             <div class="stats">
                 <div class="stat-box">
-                    <div class="stat-number">3</div>
+                    <div class="stat-number" id="user-videos">3</div>
                     <div class="stat-label">Videos Uploaded</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number">1,245</div>
+                    <div class="stat-number" id="user-views">1,245</div>
                     <div class="stat-label">Total Views</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number">420 RWF</div>
+                    <div class="stat-number" id="user-balance">420 RWF</div>
                     <div class="stat-label">Total Earned</div>
                 </div>
             </div>
-            
+
+            <div class="withdrawal-section">
+                <h3>Withdraw Earnings</h3>
+                <p>Your current balance: <strong id="withdraw-balance">420 RWF</strong></p>
+                <div class="form-group">
+                    <label for="withdraw-method">Withdrawal Method</label>
+                    <select id="withdraw-method">
+                        <option value="mobile_money">Mobile Money</option>
+                        <option value="bank">Bank Transfer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="withdraw-account">Account Number</label>
+                    <input type="text" id="withdraw-account" placeholder="Enter your account number">
+                </div>
+                <div class="form-group">
+                    <label for="withdraw-amount">Amount (RWF)</label>
+                    <input type="number" id="withdraw-amount" placeholder="Enter amount to withdraw">
+                </div>
+                <button onclick="requestWithdrawal()" class="withdraw-btn">Request Withdrawal</button>
+            </div>
+
             <h3>Your Videos</h3>
-            
-            <div class="video-card">
-                <h3>My First Vlog - Kigali Life</h3>
-                <p>Status: <span style="color: green;">Approved</span></p>
-                <div class="video-info">
-                    <span>Views: 845</span>
-                    <span>Earnings: 210 RWF</span>
-                </div>
-            </div>
-            
-            <div class="video-card">
-                <h3>Tech Review: New Smartphones</h3>
-                <p>Status: <span style="color: blue;">Pending Approval</span></p>
-                <div class="video-info">
-                    <span>Views: 0</span>
-                    <span>Earnings: 0 RWF</span>
-                </div>
-            </div>
-            
-            <div class="video-card">
-                <h3>Rwandan Coffee Culture</h3>
-                <p>Status: <span style="color: green;">Approved</span></p>
-                <div class="video-info">
-                    <span>Views: 400</span>
-                    <span>Earnings: 210 RWF</span>
-                </div>
+            <div id="user-videos-list">
+                <!-- User videos will be dynamically inserted here -->
             </div>
         </div>
 
@@ -522,50 +484,68 @@
             
             <div class="admin-panel">
                 <h3>Pending Video Approvals</h3>
-                
                 <table class="admin-table">
                     <thead>
                         <tr>
                             <th>Title</th>
                             <th>Uploader</th>
                             <th>Transaction ID</th>
+                            <th>Thumbnail</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="approval-list">
-                        <tr>
-                            <td>How to Code in JavaScript</td>
-                            <td>user123</td>
-                            <td>MM123456789</td>
-                            <td>
-                                <button class="action-btn approve-btn">Approve</button>
-                                <button class="action-btn reject-btn">Reject</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Rwanda Travel Guide</td>
-                            <td>traveler22</td>
-                            <td>MM987654321</td>
-                            <td>
-                                <button class="action-btn approve-btn">Approve</button>
-                                <button class="action-btn reject-btn">Reject</button>
-                            </td>
-                        </tr>
+                        <!-- Pending approvals will be dynamically inserted here -->
                     </tbody>
                 </table>
-                
+
+                <h3>Withdrawal Requests</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Account</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="withdrawal-list">
+                        <!-- Withdrawal requests will be dynamically inserted here -->
+                    </tbody>
+                </table>
+
+                <div class="admin-upload">
+                    <h3>Add Professional Video</h3>
+                    <div class="form-group">
+                        <label for="admin-video-title">Video Title</label>
+                        <input type="text" id="admin-video-title" placeholder="Enter video title">
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-video-url">YouTube Video URL</label>
+                        <input type="text" id="admin-video-url" placeholder="https://youtube.com/video" onchange="generateAdminThumbnail()">
+                        <img id="admin-thumbnail-preview" class="thumbnail-preview" alt="Thumbnail preview">
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-video-desc">Video Description</label>
+                        <textarea id="admin-video-desc" rows="4" placeholder="Describe the video"></textarea>
+                    </div>
+                    <button onclick="addProfessionalVideo()">Add Professional Video</button>
+                </div>
+
                 <h3>Platform Statistics</h3>
                 <div class="stats">
                     <div class="stat-box">
-                        <div class="stat-number">2,150</div>
+                        <div class="stat-number" id="admin-total-users">2,150</div>
                         <div class="stat-label">Total Users</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">8,240</div>
+                        <div class="stat-number" id="admin-total-videos">8,240</div>
                         <div class="stat-label">Total Videos</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">2.5M RWF</div>
+                        <div class="stat-number" id="admin-total-revenue">2.5M RWF</div>
                         <div class="stat-label">Total Revenue</div>
                     </div>
                 </div>
@@ -628,25 +608,31 @@
     </footer>
 
     <script>
-        // Simulated database
+        // Enhanced database with more functionality
         const users = [
             { id: 1, name: "Admin", email: "admin@tubepromote.com", password: "admin123", role: "admin", balance: 0 },
             { id: 2, name: "John Doe", email: "john@example.com", password: "password", role: "youtuber", balance: 0 },
             { id: 3, name: "Jane Smith", email: "jane@example.com", password: "password", role: "viewer", balance: 120 }
         ];
-        
+
         const videos = [
-            { id: 1, title: "How to Grow Your YouTube Channel", url: "https://youtube.com/123", description: "Learn proven strategies", youtuberId: 2, approved: true, views: 1245, likes: 87 },
-            { id: 2, title: "Cooking Traditional Rwandan Dishes", url: "https://youtube.com/456", description: "Join me as I prepare", youtuberId: 2, approved: true, views: 892, likes: 65 },
-            { id: 3, title: "Kigali City Tour 2023", url: "https://youtube.com/789", description: "Explore the city", youtuberId: 2, approved: true, views: 1567, likes: 102 }
+            { id: 1, title: "How to Grow Your YouTube Channel", url: "https://www.youtube.com/watch?v=abcdefghijk", description: "Learn proven strategies", youtuberId: 2, approved: true, views: 1245, likes: 87, thumbnail: "https://img.youtube.com/vi/abcdefghijk/mqdefault.jpg" },
+            { id: 2, title: "Cooking Traditional Rwandan Dishes", url: "https://www.youtube.com/watch?v=mnopqrstuvw", description: "Join me as I prepare", youtuberId: 2, approved: true, views: 892, likes: 65, thumbnail: "https://img.youtube.com/vi/mnopqrstuvw/mqdefault.jpg" },
+            { id: 3, title: "Kigali City Tour 2023", url: "https://www.youtube.com/watch?v=xyz12345678", description: "Explore the city", youtuberId: 2, approved: true, views: 1567, likes: 102, thumbnail: "https://img.youtube.com/vi/xyz12345678/mqdefault.jpg" }
         ];
-        
+
         const pendingVideos = [
-            { id: 4, title: "How to Code in JavaScript", url: "https://youtube.com/js", description: "Coding tutorial", youtuberId: 2, transactionId: "MM123456789" },
-            { id: 5, title: "Rwanda Travel Guide", url: "https://youtube.com/travel", description: "Travel vlog", youtuberId: 3, transactionId: "MM987654321" }
+            { id: 4, title: "How to Code in JavaScript", url: "https://www.youtube.com/watch?v=js123456789", description: "Coding tutorial", youtuberId: 2, transactionId: "MM123456789", thumbnail: "https://img.youtube.com/vi/js123456789/mqdefault.jpg" },
+            { id: 5, title: "Rwanda Travel Guide", url: "https://www.youtube.com/watch?v=travel12345", description: "Travel vlog", youtuberId: 3, transactionId: "MM987654321", thumbnail: "https://img.youtube.com/vi/travel12345/mqdefault.jpg" }
         ];
-        
+
+        const withdrawalRequests = [
+            { id: 1, userId: 3, amount: 100, method: "mobile_money", account: "0788123456", status: "pending" }
+        ];
+
         let currentUser = null;
+        let selectedVideo = null;
+        let countdownInterval = null;
 
         // DOM functions
         function switchTab(tabName) {
@@ -665,20 +651,31 @@
             // Activate selected tab and content
             document.getElementById(tabName).classList.add('active');
             event.currentTarget.classList.add('active');
+            
+            // Load content based on tab
+            if (tabName === 'videos') {
+                loadVideos();
+            } else if (tabName === 'dashboard') {
+                loadDashboard();
+            } else if (tabName === 'admin') {
+                loadAdminPanel();
+            } else if (tabName === 'view') {
+                resetVideoPlayer();
+            }
         }
-        
+
         function showLogin() {
             document.getElementById('login-modal').style.display = 'flex';
         }
-        
+
         function showRegister() {
             document.getElementById('register-modal').style.display = 'flex';
         }
-        
+
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
-        
+
         function login() {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
@@ -694,7 +691,7 @@
                 alert('Invalid email or password');
             }
         }
-        
+
         function register() {
             const name = document.getElementById('register-name').value;
             const email = document.getElementById('register-email').value;
@@ -723,26 +720,21 @@
             closeModal('register-modal');
             alert('Registration successful! You are now logged in.');
         }
-        
+
         function logout() {
             currentUser = null;
             updateUI();
             alert('You have been logged out');
         }
-        
+
         function updateUI() {
             const authButtons = document.getElementById('auth-buttons');
             const userInfo = document.getElementById('user-info');
             const adminTab = document.getElementById('admin-tab');
             
             if (currentUser) {
-                authButtons.innerHTML = `
-                    <button onclick="logout()">Logout</button>
-                `;
-                userInfo.innerHTML = `
-                    <i class="fas fa-user"></i>
-                    <span>${currentUser.name} (${currentUser.role}) | Balance: ${currentUser.balance} RWF</span>
-                `;
+                authButtons.innerHTML = `<button onclick="logout()">Logout</button>`;
+                userInfo.innerHTML = `<i class="fas fa-user"></i> <span>${currentUser.name} (${currentUser.role}) | Balance: ${currentUser.balance} RWF</span>`;
                 
                 // Show admin tab if user is admin
                 if (currentUser.role === 'admin') {
@@ -759,7 +751,41 @@
                 adminTab.style.display = 'none';
             }
         }
-        
+
+        function generateThumbnail() {
+            const url = document.getElementById('video-url').value;
+            const thumbnailPreview = document.getElementById('thumbnail-preview');
+            
+            if (url) {
+                // Extract YouTube video ID
+                const videoId = extractYoutubeId(url);
+                if (videoId) {
+                    thumbnailPreview.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                    thumbnailPreview.style.display = 'block';
+                }
+            }
+        }
+
+        function generateAdminThumbnail() {
+            const url = document.getElementById('admin-video-url').value;
+            const thumbnailPreview = document.getElementById('admin-thumbnail-preview');
+            
+            if (url) {
+                // Extract YouTube video ID
+                const videoId = extractYoutubeId(url);
+                if (videoId) {
+                    thumbnailPreview.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                    thumbnailPreview.style.display = 'block';
+                }
+            }
+        }
+
+        function extractYoutubeId(url) {
+            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[7].length === 11) ? match[7] : false;
+        }
+
         function processPayment() {
             if (!currentUser) {
                 alert('Please login first');
@@ -769,6 +795,7 @@
             
             const title = document.getElementById('video-title').value;
             const url = document.getElementById('video-url').value;
+            const description = document.getElementById('video-desc').value;
             const transactionId = document.getElementById('payment-proof').value;
             
             if (!title || !url || !transactionId) {
@@ -776,13 +803,19 @@
                 return;
             }
             
+            // Extract YouTube video ID for thumbnail
+            const videoId = extractYoutubeId(url);
+            const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : '';
+            
             // Add to pending videos
             pendingVideos.push({
                 id: videos.length + pendingVideos.length + 1,
                 title,
                 url,
+                description,
                 youtuberId: currentUser.id,
-                transactionId
+                transactionId,
+                thumbnail
             });
             
             alert('Video submitted successfully! It will be published after approval.');
@@ -792,12 +825,78 @@
             document.getElementById('video-url').value = '';
             document.getElementById('video-desc').value = '';
             document.getElementById('payment-proof').value = '';
+            document.getElementById('thumbnail-preview').style.display = 'none';
         }
-        
+
+        function loadVideos() {
+            const videoGrid = document.getElementById('video-grid');
+            videoGrid.innerHTML = '';
+            
+            videos.filter(video => video.approved).forEach(video => {
+                const videoElement = document.createElement('div');
+                videoElement.className = 'video-item';
+                videoElement.innerHTML = `
+                    <div class="video-card" onclick="selectVideo(${video.id})">
+                        <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                        <div class="video-info">
+                            <span>Views: ${video.views}</span>
+                            <span>Likes: ${video.likes}</span>
+                        </div>
+                    </div>
+                `;
+                videoGrid.appendChild(videoElement);
+            });
+        }
+
+        function selectVideo(videoId) {
+            selectedVideo = videos.find(v => v.id === videoId);
+            
+            if (selectedVideo) {
+                // Switch to Watch & Earn tab
+                switchTab('view');
+                
+                // Update video player
+                const videoPlayer = document.getElementById('video-player');
+                const videoId = extractYoutubeId(selectedVideo.url);
+                
+                if (videoId) {
+                    videoPlayer.innerHTML = `
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" 
+                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+                    `;
+                }
+                
+                // Enable start button
+                document.getElementById('start-button').disabled = false;
+            }
+        }
+
+        function resetVideoPlayer() {
+            if (!selectedVideo) {
+                document.getElementById('video-player').innerHTML = '[Select a video to start watching]';
+                document.getElementById('start-button').disabled = true;
+                document.getElementById('claim-button').disabled = true;
+                document.getElementById('timer').textContent = '02:00';
+                
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+            }
+        }
+
         function startWatching() {
             if (!currentUser) {
                 alert('Please login first');
                 showLogin();
+                return;
+            }
+            
+            if (!selectedVideo) {
+                alert('Please select a video first');
                 return;
             }
             
@@ -807,42 +906,274 @@
             let timeLeft = 120;
             const timerElement = document.getElementById('timer');
             const claimButton = document.getElementById('claim-button');
+            const startButton = document.getElementById('start-button');
             
-            const countdown = setInterval(function() {
+            startButton.disabled = true;
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(function() {
                 timeLeft--;
-                
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
-                
                 timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 
                 if (timeLeft <= 0) {
-                    clearInterval(countdown);
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
                     claimButton.disabled = false;
                     alert('You have watched the video for 2 minutes! You can now claim your 30 RWF.');
                 }
             }, 1000);
         }
-        
+
         function claimEarnings() {
             if (!currentUser) {
                 alert('Please login first');
                 return;
             }
             
+            if (!selectedVideo) {
+                alert('No video selected');
+                return;
+            }
+            
             // Update user balance
             currentUser.balance += 30;
-            updateUI();
+            selectedVideo.views += 1;
             
+            updateUI();
             alert('30 RWF has been added to your account balance!');
+            
             document.getElementById('claim-button').disabled = true;
             document.getElementById('timer').textContent = '02:00';
+            document.getElementById('start-button').disabled = false;
+            
+            // Reset for next video
+            selectedVideo = null;
         }
-        
+
+        function loadDashboard() {
+            if (!currentUser) return;
+            
+            // Update user stats
+            const userVideos = videos.filter(video => video.youtuberId === currentUser.id);
+            const totalViews = userVideos.reduce((sum, video) => sum + video.views, 0);
+            
+            document.getElementById('user-videos').textContent = userVideos.length;
+            document.getElementById('user-views').textContent = totalViews;
+            document.getElementById('user-balance').textContent = `${currentUser.balance} RWF`;
+            document.getElementById('withdraw-balance').textContent = `${currentUser.balance} RWF`;
+            
+            // Load user videos
+            const userVideosList = document.getElementById('user-videos-list');
+            userVideosList.innerHTML = '';
+            
+            userVideos.forEach(video => {
+                const status = video.approved ? 
+                    `<span style="color: green;">Approved</span>` : 
+                    `<span style="color: blue;">Pending Approval</span>`;
+                
+                const videoElement = document.createElement('div');
+                videoElement.className = 'video-card';
+                videoElement.innerHTML = `
+                    <h3>${video.title}</h3>
+                    <p>Status: ${status}</p>
+                    <div class="video-info">
+                        <span>Views: ${video.views}</span>
+                        <span>Earnings: ${Math.floor(video.views * 0.25)} RWF</span>
+                    </div>
+                `;
+                userVideosList.appendChild(videoElement);
+            });
+        }
+
+        function requestWithdrawal() {
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+            
+            const amount = parseInt(document.getElementById('withdraw-amount').value);
+            const method = document.getElementById('withdraw-method').value;
+            const account = document.getElementById('withdraw-account').value;
+            
+            if (!amount || !account) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            if (amount > currentUser.balance) {
+                alert('Insufficient balance');
+                return;
+            }
+            
+            if (amount < 100) {
+                alert('Minimum withdrawal amount is 100 RWF');
+                return;
+            }
+            
+            // Create withdrawal request
+            withdrawalRequests.push({
+                id: withdrawalRequests.length + 1,
+                userId: currentUser.id,
+                amount,
+                method,
+                account,
+                status: 'pending'
+            });
+            
+            alert('Withdrawal request submitted! It will be processed within 24 hours.');
+            
+            // Reset form
+            document.getElementById('withdraw-amount').value = '';
+            document.getElementById('withdraw-account').value = '';
+        }
+
+        function loadAdminPanel() {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            
+            // Load pending approvals
+            const approvalList = document.getElementById('approval-list');
+            approvalList.innerHTML = '';
+            
+            pendingVideos.forEach(video => {
+                const uploader = users.find(u => u.id === video.youtuberId);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${video.title}</td>
+                    <td>${uploader ? uploader.name : 'Unknown'}</td>
+                    <td>${video.transactionId}</td>
+                    <td><img src="${video.thumbnail}" alt="Thumbnail" style="width: 60px; height: 45px; object-fit: cover;"></td>
+                    <td>
+                        <button class="action-btn approve-btn" onclick="approveVideo(${video.id})">Approve</button>
+                        <button class="action-btn reject-btn" onclick="rejectVideo(${video.id})">Reject</button>
+                    </td>
+                `;
+                approvalList.appendChild(row);
+            });
+            
+            // Load withdrawal requests
+            const withdrawalList = document.getElementById('withdrawal-list');
+            withdrawalList.innerHTML = '';
+            
+            withdrawalRequests.forEach(request => {
+                const user = users.find(u => u.id === request.userId);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user ? user.name : 'Unknown'}</td>
+                    <td>${request.amount} RWF</td>
+                    <td>${request.method.replace('_', ' ').toUpperCase()}</td>
+                    <td>${request.account}</td>
+                    <td>${request.status}</td>
+                    <td>
+                        ${request.status === 'pending' ? `
+                            <button class="action-btn approve-btn" onclick="approveWithdrawal(${request.id})">Approve</button>
+                            <button class="action-btn reject-btn" onclick="rejectWithdrawal(${request.id})">Reject</button>
+                        ` : 'Processed'}
+                    </td>
+                `;
+                withdrawalList.appendChild(row);
+            });
+        }
+
+        function approveVideo(videoId) {
+            const videoIndex = pendingVideos.findIndex(v => v.id === videoId);
+            
+            if (videoIndex !== -1) {
+                const video = pendingVideos[videoIndex];
+                video.approved = true;
+                videos.push(video);
+                pendingVideos.splice(videoIndex, 1);
+                
+                alert('Video approved successfully!');
+                loadAdminPanel();
+            }
+        }
+
+        function rejectVideo(videoId) {
+            const videoIndex = pendingVideos.findIndex(v => v.id === videoId);
+            
+            if (videoIndex !== -1) {
+                pendingVideos.splice(videoIndex, 1);
+                alert('Video rejected successfully!');
+                loadAdminPanel();
+            }
+        }
+
+        function approveWithdrawal(requestId) {
+            const requestIndex = withdrawalRequests.findIndex(r => r.id === requestId);
+            
+            if (requestIndex !== -1) {
+                const request = withdrawalRequests[requestIndex];
+                const user = users.find(u => u.id === request.userId);
+                
+                if (user) {
+                    if (user.balance >= request.amount) {
+                        user.balance -= request.amount;
+                        request.status = 'approved';
+                        alert('Withdrawal approved successfully!');
+                        loadAdminPanel();
+                    } else {
+                        alert('User has insufficient balance');
+                    }
+                }
+            }
+        }
+
+        function rejectWithdrawal(requestId) {
+            const requestIndex = withdrawalRequests.findIndex(r => r.id === requestId);
+            
+            if (requestIndex !== -1) {
+                withdrawalRequests[requestIndex].status = 'rejected';
+                alert('Withdrawal rejected successfully!');
+                loadAdminPanel();
+            }
+        }
+
+        function addProfessionalVideo() {
+            const title = document.getElementById('admin-video-title').value;
+            const url = document.getElementById('admin-video-url').value;
+            const description = document.getElementById('admin-video-desc').value;
+            
+            if (!title || !url) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            // Extract YouTube video ID for thumbnail
+            const videoId = extractYoutubeId(url);
+            const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : '';
+            
+            // Add professional video (auto-approved)
+            videos.push({
+                id: videos.length + 1,
+                title,
+                url,
+                description,
+                youtuberId: 0, // System user
+                approved: true,
+                views: 0,
+                likes: 0,
+                thumbnail
+            });
+            
+            alert('Professional video added successfully!');
+            
+            // Reset form
+            document.getElementById('admin-video-title').value = '';
+            document.getElementById('admin-video-url').value = '';
+            document.getElementById('admin-video-desc').value = '';
+            document.getElementById('admin-thumbnail-preview').style.display = 'none';
+        }
+
         // Initialize the UI
         updateUI();
+        loadVideos();
     </script>
 </body>
 </html>
-```
-
