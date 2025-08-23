@@ -1,30 +1,468 @@
-const express = require('express');
-const app = express();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TubePromote - Boost Your YouTube Channel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(to right, #FF0000, #FF5E5E);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo span {
+            color: #fff;
+            margin-right: 10px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .tab.active {
+            background: #FF0000;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        h2 {
+            color: #FF0000;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background: #FF0000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #CC0000;
+        }
+        
+        .video-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-card h3 {
+            color: #FF0000;
+            margin-bottom: 10px;
+        }
+        
+        .video-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .payment-info {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #FF0000;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin: 0 10px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            color: #FF0000;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background: #333;
+            color: white;
+        }
+        
+        .video-player {
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .timer {
+            font-size: 24px;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .earnings {
+            text-align: center;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .stats {
+                flex-direction: column;
+            }
+            
+            .stat-box {
+                margin: 10px 0;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span>TubePromote</span>
+        </div>
+        <p>Boost Your YouTube Channel & Earn by Watching Videos</p>
+    </header>
 
-app.post('/api/referral', async (req, res) => {
-  const { referrerId, referredUserId } = req.body;
-  // Verify referred user has deposited
-  const deposited = await checkDeposit(referredUserId);
-  if (deposited) {
-    await creditBalance(referrerId, 1.40);
-    res.json({ success: true, reward: 1.40 });
-  } else {
-    res.status(400).json({ error: 'No deposit made' });
-  }
-});
+    <div class="container">
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number">1,245</div>
+                <div class="stat-label">Videos Promoted</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">56,892</div>
+                <div class="stat-label">Total Views</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">1.2M RWF</div>
+                <div class="stat-label">Earned by Viewers</div>
+            </div>
+        </div>
 
-app.listen(3000, () => console.log('Server running'));app.postconst axios = require('axios');
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('upload')">Upload Video</div>
+            <div class="tab" onclick="switchTab('videos')">Available Videos</div>
+            <div class="tab" onclick="switchTab('view')">Watch & Earn</div>
+            <div class="tab" onclick="switchTab('dashboard')">Dashboard</div>
+        </div>
 
-async function createBinancePayOrder(userId, amount) {
-  const response = await axios.post('https://api.binance.com/pay/v1/order', {
-    merchantId: 'YOUR_MERCHANT_ID',
-    amount: amount,
-    currency: 'USDT',
-    userId: userId,
-  }, {
-    headers: {
-      'Authorization': 'Bearer YOUR_API_KEY'
-    }
-  });
-  return response.data.qrCode;
-}https://api.binance.com/pay/v1/order
+        <div id="upload" class="tab-content active">
+            <h2>Upload Your Video for Promotion</h2>
+            <div class="payment-info">
+                <p><strong>Promotion Fee:</strong> 1000 RWF per video</p>
+                <p><strong>Platform Commission:</strong> 60% (600 RWF)</p>
+                <p>Your video will be published after payment approval.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="video-title">Video Title</label>
+                <input type="text" id="video-title" placeholder="Enter your video title">
+            </div>
+            
+            <div class="form-group">
+                <label for="video-url">YouTube Video URL</label>
+                <input type="text" id="video-url" placeholder="https://youtube.com/your-video">
+            </div>
+            
+            <div class="form-group">
+                <label for="video-desc">Video Description</label>
+                <textarea id="video-desc" rows="4" placeholder="Describe your video"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="payment-method">Payment Method</label>
+                <select id="payment-method">
+                    <option value="">Select payment method</option>
+                    <option value="mobile-money">Mobile Money</option>
+                    <option value="bank-transfer">Bank Transfer</option>
+                    <option value="credit-card">Credit Card</option>
+                </select>
+            </div>
+            
+            <button onclick="processPayment()">Pay 1000 RWF & Submit for Approval</button>
+        </div>
+
+        <div id="videos" class="tab-content">
+            <h2>Videos Available for Promotion</h2>
+            
+            <div class="video-card">
+                <h3>How to Grow Your YouTube Channel</h3>
+                <p>Learn proven strategies to increase your subscribers and views on YouTube.</p>
+                <div class="video-info">
+                    <span>Views: 1,245</span>
+                    <span>Likes: 87</span>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <h3>Cooking Traditional Rwandan Dishes</h3>
+                <p>Join me as I prepare delicious Rwandan meals step by step.</p>
+                <div class="video-info">
+                    <span>Views: 892</span>
+                    <span>Likes: 65</span>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <h3>Kigali City Tour 2023</h3>
+                <p>Explore the beautiful city of Kigali with me and discover hidden gems.</p>
+                <div class="video-info">
+                    <span>Views: 1,567</span>
+                    <span>Likes: 102</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="view" class="tab-content">
+            <h2>Watch Videos and Earn Money</h2>
+            <div class="payment-info">
+                <p><strong>Earning Rate:</strong> 30 RWF for watching a video for at least 2 minutes</p>
+                <p><strong>Note:</strong> You can only watch each video once to earn rewards.</p>
+            </div>
+            
+            <div class="video-player">
+                [Video Player Will Appear Here]
+            </div>
+            
+            <div class="timer" id="timer">02:00</div>
+            
+            <div class="earnings">
+                <p>You will earn: <strong>30 RWF</strong> after watching for 2 minutes</p>
+            </div>
+            
+            <button onclick="startWatching()">Start Watching</button>
+            <button onclick="claimEarnings()" disabled id="claim-button">Claim Your 30 RWF</button>
+        </div>
+
+        <div id="dashboard" class="tab-content">
+            <h2>Your Dashboard</h2>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Videos Uploaded</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">1,245</div>
+                    <div class="stat-label">Total Views</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">420 RWF</div>
+                    <div class="stat-label">Total Earned</div>
+                </div>
+            </div>
+            
+            <h3>Your Videos</h3>
+            
+            <div class="video-card">
+                <h3>My First Vlog - Kigali Life</h3>
+                <p>Status: <span style="color: green;">Approved</span></p>
+                <div class="video-info">
+                    <span>Views: 845</span>
+                    <span>Earnings: 210 RWF</span>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <h3>Tech Review: New Smartphones</h3>
+                <p>Status: <span style="color: blue;">Pending Approval</span></p>
+                <div class="video-info">
+                    <span>Views: 0</span>
+                    <span>Earnings: 0 RWF</span>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <h3>Rwandan Coffee Culture</h3>
+                <p>Status: <span style="color: green;">Approved</span></p>
+                <div class="video-info">
+                    <span>Views: 400</span>
+                    <span>Earnings: 210 RWF</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>TubePromote &copy; 2023. All rights reserved.</p>
+        <p>Help YouTubers grow their channel and help viewers earn money by watching videos</p>
+    </footer>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Deactivate all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Activate selected tab and content
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function processPayment() {
+            const title = document.getElementById('video-title').value;
+            const url = document.getElementById('video-url').value;
+            const method = document.getElementById('payment-method').value;
+            
+            if (!title || !url || !method) {
+                alert('Please fill all fields before submitting.');
+                return;
+            }
+            
+            alert('Payment processed successfully! Your video is pending approval. You will be notified when it is published.');
+            
+            // Reset form
+            document.getElementById('video-title').value = '';
+            document.getElementById('video-url').value = '';
+            document.getElementById('video-desc').value = '';
+            document.getElementById('payment-method').value = '';
+        }
+        
+        function startWatching() {
+            alert('Video started! Please watch for at least 2 minutes to earn 30 RWF.');
+            
+            // Simulate timer countdown
+            let timeLeft = 120;
+            const timerElement = document.getElementById('timer');
+            const claimButton = document.getElementById('claim-button');
+            
+            const countdown = setInterval(function() {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    claimButton.disabled = false;
+                    alert('You have watched the video for 2 minutes! You can now claim your 30 RWF.');
+                }
+            }, 1000);
+        }
+        
+        function claimEarnings() {
+            alert('30 RWF has been added to your account balance!');
+            document.getElementById('claim-button').disabled = true;
+            document.getElementById('timer').textContent = '02:00';
+        }
+    </script>
+</body>
+      </html>
