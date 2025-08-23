@@ -1,191 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>📺 Tube Promote Pro</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script type="module">
-    // --- Firebase Init ---
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } 
-      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, onSnapshot } 
-      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "YOUR-API-KEY",
-      authDomain: "YOUR-PROJECT.firebaseapp.com",
-      projectId: "YOUR-PROJECT-ID",
-      storageBucket: "YOUR-PROJECT.appspot.com",
-      messagingSenderId: "YOUR-SENDER-ID",
-      appId: "YOUR-APP-ID"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // --- Helpers ---
-    const $ = id => document.getElementById(id);
-    const tpl = html => { const t=document.createElement('template'); t.innerHTML=html; return t.content.firstChild; };
-    let currentUser=null;
-
-    // --- Auth ---
-    const provider=new GoogleAuthProvider();
-    $("loginBtn").onclick=()=>signInWithPopup(auth,provider);
-    onAuthStateChanged(auth,async user=>{
-      currentUser=user;
-      $("user").innerText=user?`👤 ${user.displayName}`:"Not logged in";
-      if(user){
-        await setDoc(doc(db,"users",user.uid),
-          {name:user.displayName,email:user.email,earnings:0},{merge:true});
-        loadEarnings();
-      }
-    });
-
-    // --- Earnings ---
-    async function loadEarnings(){
-      if(!currentUser)return;
-      const snap=await getDoc(doc(db,"users",currentUser.uid));
-      $("earnings").innerText=snap.exists()?snap.data().earnings||0:0;
-    }
-    async function addEarnings(amount){
-      if(!currentUser)return;
-      const ref=doc(db,"users",currentUser.uid);
-      const snap=await getDoc(ref);
-      const val=(snap.data().earnings||0)+amount;
-      await updateDoc(ref,{earnings:val});
-      loadEarnings();
-    }
-
-    // --- Videos ---
-    const videoList=$("videos");
-    onSnapshot(collection(db,"videos"),snap=>{
-      videoList.innerHTML="";
-      snap.forEach(d=>{
-        const v=d.data();
-        const el=tpl(`
-          <div class="p-4 shadow rounded bg-white relative">
-            <iframe id="vid-${d.id}" class="w-full aspect-video" src="https://www.youtube.com/embed/${v.ytId}?enablejsapi=1"></iframe>
-            <p class="mt-2 font-bold">${v.title}</p>
-          </div>`);
-        videoList.appendChild(el);
-        // Timer tracking
-        setupVideoTimer(`vid-${d.id}`);
-      });
-    });
-    $("addVideo").onsubmit=e=>{
-      e.preventDefault();
-      addDoc(collection(db,"videos"),{
-        ytId:$("ytId").value,title:$("ytTitle").value,uid:currentUser.uid,ts:Date.now()
-      });
-      $("ytId").value=""; $("ytTitle").value="";
-    };
-
-    // --- Video Timer with pause handling ---
-    function setupVideoTimer(id){
-      let timer=null,seconds=0;
-      const iframe=$(`#${id}`);
-      const onMsg=e=>{
-        if(!e.data || !e.data.event)return;
-        if(e.data.info?.playerState===1){ // playing
-          if(!timer) timer=setInterval(()=>{seconds++; if(seconds%30===0) addEarnings(1);},1000);
-        }else{ // paused or stopped
-          clearInterval(timer); timer=null;
-        }
-      };
-      window.addEventListener("message",onMsg);
-      // inject API
-      iframe.contentWindow.postMessage('{"event":"listening","id":1}','*');
-    }
-
-    // --- Floating Latest Video ---
-    onSnapshot(query(collection(db,"videos")),snap=>{
-      let latest=null;
-      snap.forEach(d=>{ if(!latest||d.data().ts>latest.ts) latest={id:d.id,...d.data()}; });
-      if(latest){
-        $("floating").innerHTML=`<iframe class="w-64 aspect-video shadow-lg rounded" src="https://www.youtube.com/embed/${latest.ytId}" allowfullscreen></iframe>`;
-      }
-    });
-
-    // --- Ideas ---
-    const ideaList=$("ideas");
-    onSnapshot(collection(db,"ideas"),snap=>{
-      ideaList.innerHTML="";
-      snap.forEach(d=> ideaList.appendChild(tpl(`<p class="p-2 bg-gray-100 rounded my-1">${d.data().text}</p>`)));
-    });
-    $("addIdea").onsubmit=e=>{
-      e.preventDefault();
-      addDoc(collection(db,"ideas"),{text:$("ideaText").value,uid:currentUser.uid});
-      $("ideaText").value="";
-    };
-
-    // --- Contact ---
-    $("contactForm").onsubmit=e=>{
-      e.preventDefault();
-      addDoc(collection(db,"contacts"),{message:$("msg").value,email:currentUser?.email||"anon"});
-      $("msg").value=""; alert("Message sent!");
-    };
-
-    // --- Withdrawals ---
-    const withdrawList=$("withdrawals");
-    onSnapshot(collection(db,"withdrawals"),snap=>{
-      withdrawList.innerHTML="";
-      snap.forEach(d=> withdrawList.appendChild(tpl(`<p class="p-1">💵 ${d.data().amount} RWF - ${d.data().status}</p>`)));
-    });
-    $("withdrawForm").onsubmit=e=>{
-      e.preventDefault();
-      const amt=Number($("amount").value);
-      addDoc(collection(db,"withdrawals"),{uid:currentUser.uid,amount:amt,status:"pending"});
-      $("amount").value="";
-      alert("Withdrawal requested!");
-    };
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tube Promote</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; margin:0; padding:0; }
+    header { background:#20232a; color:white; padding:1em; text-align:center; }
+    nav { display:flex; justify-content:center; gap:1em; margin:1em 0; }
+    button { padding:0.5em 1em; border:none; border-radius:5px; cursor:pointer; }
+    .container { max-width:1000px; margin:auto; padding:1em; }
+    .video-card { background:white; margin:1em 0; padding:1em; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+    iframe { width:100%; height:300px; border:none; border-radius:8px; }
+    .floating-menu { position: fixed; bottom: 20px; right: 20px; background:#007bff; color:white; padding:1em; border-radius:50%; cursor:pointer; box-shadow:0 4px 6px rgba(0,0,0,0.2);} 
+    .hidden { display:none; }
+    .comment-box, .contact-box, .withdraw-box { background:white; padding:1em; margin:1em 0; border-radius:8px; }
+  </style>
 </head>
-<body class="p-4 space-y-6 bg-gray-50">
-  <header class="flex justify-between items-center">
-    <h1 class="text-xl font-bold">📺 Tube Promote Pro</h1>
-    <button id="loginBtn" class="px-3 py-1 bg-blue-500 text-white rounded">Login</button>
-    <span id="user"></span>
+<body>
+  <header>
+    <h1>Tube Promote</h1>
+    <p>Watch, Promote, Earn</p>
   </header>
+  <nav>
+    <button onclick="showSection('videos')">Videos</button>
+    <button onclick="showSection('ideas')">Ideas</button>
+    <button onclick="showSection('withdrawals')">Withdrawals</button>
+    <button onclick="showSection('contact')">Contact</button>
+  </nav>
+  <div class="container">
+    <section id="videos">
+      <h2>Latest Videos</h2>
+      <div id="video-list"></div>
+    </section>
+    <section id="ideas" class="hidden">
+      <h2>Community Ideas</h2>
+      <div id="ideas-list"></div>
+      <textarea id="idea-input" placeholder="Share your idea..."></textarea><br>
+      <button onclick="postIdea()">Post Idea</button>
+    </section>
+    <section id="withdrawals" class="hidden">
+      <h2>Withdraw Funds</h2>
+      <div class="withdraw-box">
+        <input type="number" id="withdraw-amount" placeholder="Amount" /><br>
+        <button onclick="requestWithdrawal()">Request Withdrawal</button>
+      </div>
+      <div id="withdraw-list"></div>
+    </section>
+    <section id="contact" class="hidden">
+      <h2>Contact Us</h2>
+      <div class="contact-box">
+        <input type="text" id="contact-name" placeholder="Your Name" /><br>
+        <input type="email" id="contact-email" placeholder="Your Email" /><br>
+        <textarea id="contact-msg" placeholder="Message..."></textarea><br>
+        <button onclick="sendContact()">Send</button>
+      </div>
+    </section>
+  </div>
+  <div class="floating-menu" onclick="toggleMenu()">☰</div>
 
-  <div class="fixed bottom-4 right-4" id="floating"></div>
+  <script>
+    // Firebase Config (replace with your Firebase project config)
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-  <section>
-    <h2 class="text-lg font-semibold">🎬 Videos</h2>
-    <form id="addVideo" class="space-x-2 my-2">
-      <input id="ytId" placeholder="YouTube ID" class="border p-1">
-      <input id="ytTitle" placeholder="Title" class="border p-1">
-      <button class="bg-green-500 text-white px-2 py-1 rounded">Add</button>
-    </form>
-    <div id="videos" class="grid md:grid-cols-2 gap-4 mt-3"></div>
-  </section>
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-  <section>
-    <h2 class="text-lg font-semibold">💰 Earnings</h2>
-    <p>Balance: <span id="earnings">0</span> RWF</p>
-    <form id="withdrawForm" class="space-x-2 mt-2">
-      <input id="amount" type="number" placeholder="Amount" class="border p-1">
-      <button class="bg-yellow-500 text-white px-2 py-1 rounded">Withdraw</button>
-    </form>
-    <div id="withdrawals" class="mt-2"></div>
-  </section>
+    // Section toggle
+    function showSection(id){
+      document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
 
-  <section>
-    <h2 class="text-lg font-semibold">💡 Ideas</h2>
-    <form id="addIdea" class="space-x-2">
-      <input id="ideaText" placeholder="Share an idea..." class="border p-1 w-64">
-      <button class="bg-purple-500 text-white px-2 py-1 rounded">Post</button>
-    </form>
-    <div id="ideas" class="mt-2"></div>
-  </section>
+    // Video rendering with timer pause feature
+    const videoList = document.getElementById("video-list");
+    function renderVideos(){
+      videoList.innerHTML = "";
+      db.collection("videos").orderBy("createdAt","desc").onSnapshot(snapshot => {
+        snapshot.forEach(doc => {
+          let v = doc.data();
+          const card = document.createElement("div");
+          card.className = "video-card";
+          card.innerHTML = `<h3>${v.title}</h3><iframe src="https://www.youtube.com/embed/${v.youtubeId}?enablejsapi=1"></iframe>`;
+          videoList.appendChild(card);
+        });
+      });
+    }
+    renderVideos();
 
-  <section>
-    <h2 class="text-lg font-semibold">📩 Contact</h2>
-    <form id="contactForm" class="space-x-2">
-      <input id="msg" placeholder="Message..." class="border p-1 w-64">
-      <button class="bg-red-500 text-white px-2 py-1 rounded">Send</button>
-    </form>
-  </section>
+    // Ideas
+    function postIdea(){
+      let text = document.getElementById("idea-input").value;
+      if(text){
+        db.collection("ideas").add({ text, createdAt: Date.now() });
+        document.getElementById("idea-input").value="";
+      }
+    }
+    db.collection("ideas").orderBy("createdAt","desc").onSnapshot(snap => {
+      const list = document.getElementById("ideas-list");
+      list.innerHTML="";
+      snap.forEach(doc=>{
+        let d = doc.data();
+        list.innerHTML += `<p>💡 ${d.text}</p>`;
+      });
+    });
+
+    // Withdrawals
+    function requestWithdrawal(){
+      let amount = parseFloat(document.getElementById("withdraw-amount").value);
+      if(amount>0){
+        db.collection("withdrawals").add({ amount, status:"Pending", createdAt: Date.now() });
+        document.getElementById("withdraw-amount").value="";
+      }
+    }
+    db.collection("withdrawals").orderBy("createdAt","desc").onSnapshot(snap=>{
+      const list=document.getElementById("withdraw-list");
+      list.innerHTML="";
+      snap.forEach(doc=>{
+        let w=doc.data();
+        list.innerHTML+=`<p>${w.amount} RWF - ${w.status}</p>`;
+      });
+    });
+
+    // Contact form
+    function sendContact(){
+      let name=document.getElementById("contact-name").value;
+      let email=document.getElementById("contact-email").value;
+      let msg=document.getElementById("contact-msg").value;
+      if(name && email && msg){
+        db.collection("contacts").add({name,email,msg,createdAt:Date.now()});
+        alert("Message sent!");
+        document.getElementById("contact-name").value="";
+        document.getElementById("contact-email").value="";
+        document.getElementById("contact-msg").value="";
+      }
+    }
+
+    // Floating menu toggle
+    function toggleMenu(){
+      alert("Floating menu clicked - expand with more options");
+    }
+  </script>
 </body>
-      </html>
+  </html>
       
