@@ -629,4 +629,220 @@
 
     <script>
         // Simulated database
-        con
+        const users = [
+            { id: 1, name: "Admin", email: "admin@tubepromote.com", password: "admin123", role: "admin", balance: 0 },
+            { id: 2, name: "John Doe", email: "john@example.com", password: "password", role: "youtuber", balance: 0 },
+            { id: 3, name: "Jane Smith", email: "jane@example.com", password: "password", role: "viewer", balance: 120 }
+        ];
+        
+        const videos = [
+            { id: 1, title: "How to Grow Your YouTube Channel", url: "https://youtube.com/123", description: "Learn proven strategies", youtuberId: 2, approved: true, views: 1245, likes: 87 },
+            { id: 2, title: "Cooking Traditional Rwandan Dishes", url: "https://youtube.com/456", description: "Join me as I prepare", youtuberId: 2, approved: true, views: 892, likes: 65 },
+            { id: 3, title: "Kigali City Tour 2023", url: "https://youtube.com/789", description: "Explore the city", youtuberId: 2, approved: true, views: 1567, likes: 102 }
+        ];
+        
+        const pendingVideos = [
+            { id: 4, title: "How to Code in JavaScript", url: "https://youtube.com/js", description: "Coding tutorial", youtuberId: 2, transactionId: "MM123456789" },
+            { id: 5, title: "Rwanda Travel Guide", url: "https://youtube.com/travel", description: "Travel vlog", youtuberId: 3, transactionId: "MM987654321" }
+        ];
+        
+        let currentUser = null;
+
+        // DOM functions
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Deactivate all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Activate selected tab and content
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function showLogin() {
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+        
+        function showRegister() {
+            document.getElementById('register-modal').style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                updateUI();
+                closeModal('login-modal');
+                alert('Login successful!');
+            } else {
+                alert('Invalid email or password');
+            }
+        }
+        
+        function register() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const role = document.getElementById('register-role').value;
+            
+            // Check if user already exists
+            if (users.some(u => u.email === email)) {
+                alert('User with this email already exists');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: users.length + 1,
+                name,
+                email,
+                password,
+                role,
+                balance: 0
+            };
+            
+            users.push(newUser);
+            currentUser = newUser;
+            updateUI();
+            closeModal('register-modal');
+            alert('Registration successful! You are now logged in.');
+        }
+        
+        function logout() {
+            currentUser = null;
+            updateUI();
+            alert('You have been logged out');
+        }
+        
+        function updateUI() {
+            const authButtons = document.getElementById('auth-buttons');
+            const userInfo = document.getElementById('user-info');
+            const adminTab = document.getElementById('admin-tab');
+            
+            if (currentUser) {
+                authButtons.innerHTML = `
+                    <button onclick="logout()">Logout</button>
+                `;
+                userInfo.innerHTML = `
+                    <i class="fas fa-user"></i>
+                    <span>${currentUser.name} (${currentUser.role}) | Balance: ${currentUser.balance} RWF</span>
+                `;
+                
+                // Show admin tab if user is admin
+                if (currentUser.role === 'admin') {
+                    adminTab.style.display = 'flex';
+                } else {
+                    adminTab.style.display = 'none';
+                }
+            } else {
+                authButtons.innerHTML = `
+                    <button onclick="showLogin()">Login</button>
+                    <button onclick="showRegister()" class="btn-secondary">Register</button>
+                `;
+                userInfo.innerHTML = '';
+                adminTab.style.display = 'none';
+            }
+        }
+        
+        function processPayment() {
+            if (!currentUser) {
+                alert('Please login first');
+                showLogin();
+                return;
+            }
+            
+            const title = document.getElementById('video-title').value;
+            const url = document.getElementById('video-url').value;
+            const transactionId = document.getElementById('payment-proof').value;
+            
+            if (!title || !url || !transactionId) {
+                alert('Please fill all fields before submitting.');
+                return;
+            }
+            
+            // Add to pending videos
+            pendingVideos.push({
+                id: videos.length + pendingVideos.length + 1,
+                title,
+                url,
+                youtuberId: currentUser.id,
+                transactionId
+            });
+            
+            alert('Video submitted successfully! It will be published after approval.');
+            
+            // Reset form
+            document.getElementById('video-title').value = '';
+            document.getElementById('video-url').value = '';
+            document.getElementById('video-desc').value = '';
+            document.getElementById('payment-proof').value = '';
+        }
+        
+        function startWatching() {
+            if (!currentUser) {
+                alert('Please login first');
+                showLogin();
+                return;
+            }
+            
+            alert('Video started! Please watch for at least 2 minutes to earn 30 RWF.');
+            
+            // Simulate timer countdown
+            let timeLeft = 120;
+            const timerElement = document.getElementById('timer');
+            const claimButton = document.getElementById('claim-button');
+            
+            const countdown = setInterval(function() {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    claimButton.disabled = false;
+                    alert('You have watched the video for 2 minutes! You can now claim your 30 RWF.');
+                }
+            }, 1000);
+        }
+        
+        function claimEarnings() {
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+            
+            // Update user balance
+            currentUser.balance += 30;
+            updateUI();
+            
+            alert('30 RWF has been added to your account balance!');
+            document.getElementById('claim-button').disabled = true;
+            document.getElementById('timer').textContent = '02:00';
+        }
+        
+        // Initialize the UI
+        updateUI();
+    </script>
+</body>
+</html>
+```
+
